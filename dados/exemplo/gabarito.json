@@ -1,0 +1,22 @@
+{
+  "semente": 42,
+  "pessoas": 114,
+  "ligacoes": 819,
+  "pares_ligados": 752,
+  "porteiros_do_silo": [
+    "P087",
+    "P003"
+  ],
+  "pontes": [
+    "P036",
+    "P069"
+  ],
+  "silo": "Financeiro",
+  "gestor_fora_do_fluxo": "P001",
+  "isolados": [
+    "P064",
+    "P030",
+    "P086"
+  ],
+  "nao_respondentes": 23
+}

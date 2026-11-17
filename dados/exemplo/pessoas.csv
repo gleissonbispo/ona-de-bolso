@@ -1,0 +1,115 @@
+id,area,cargo,gestor_id,unidade,respondeu
+P001,Comercial,Gestor,,São Paulo,sim
+P002,Comercial,Especialista,P001,São Paulo,sim
+P003,Comercial,Especialista,P001,São Paulo,sim
+P004,Comercial,Especialista,P001,São Paulo,nao
+P005,Comercial,Analista,P001,São Paulo,nao
+P006,Comercial,Analista,P001,São Paulo,sim
+P007,Comercial,Analista,P001,São Paulo,sim
+P008,Comercial,Analista,P001,São Paulo,sim
+P009,Comercial,Analista,P001,São Paulo,sim
+P010,Comercial,Analista,P001,São Paulo,sim
+P011,Comercial,Analista,P001,São Paulo,sim
+P012,Comercial,Analista,P001,São Paulo,nao
+P013,Comercial,Analista,P001,São Paulo,sim
+P014,Comercial,Analista,P001,São Paulo,nao
+P015,Comercial,Analista,P001,São Paulo,nao
+P016,Comercial,Analista,P001,São Paulo,sim
+P017,Comercial,Analista,P001,São Paulo,sim
+P018,Comercial,Analista,P001,São Paulo,nao
+P019,Comercial,Analista,P001,São Paulo,sim
+P020,Comercial,Analista,P001,São Paulo,sim
+P021,Comercial,Analista,P001,São Paulo,sim
+P022,Comercial,Analista,P001,São Paulo,sim
+P023,Comercial,Analista,P001,São Paulo,sim
+P024,Comercial,Analista,P001,São Paulo,sim
+P025,Comercial,Analista,P001,São Paulo,sim
+P026,Comercial,Analista,P001,São Paulo,sim
+P027,Comercial,Analista,P001,São Paulo,sim
+P028,Comercial,Analista,P001,São Paulo,nao
+P029,Comercial,Analista,P001,São Paulo,nao
+P030,Comercial,Analista,P001,São Paulo,nao
+P031,Operações,Gestor,,Campinas,sim
+P032,Operações,Especialista,P031,Campinas,nao
+P033,Operações,Especialista,P031,Campinas,sim
+P034,Operações,Especialista,P031,Campinas,sim
+P035,Operações,Analista,P031,Campinas,sim
+P036,Operações,Analista,P031,Campinas,sim
+P037,Operações,Analista,P031,Campinas,nao
+P038,Operações,Analista,P031,Campinas,sim
+P039,Operações,Analista,P031,Campinas,sim
+P040,Operações,Analista,P031,Campinas,sim
+P041,Operações,Analista,P031,Campinas,sim
+P042,Operações,Analista,P031,Campinas,sim
+P043,Operações,Analista,P031,Campinas,sim
+P044,Operações,Analista,P031,Campinas,sim
+P045,Operações,Analista,P031,Campinas,sim
+P046,Operações,Analista,P031,Campinas,sim
+P047,Operações,Analista,P031,Campinas,sim
+P048,Operações,Analista,P031,Campinas,sim
+P049,Operações,Analista,P031,Campinas,sim
+P050,Operações,Analista,P031,Campinas,sim
+P051,Operações,Analista,P031,Campinas,sim
+P052,Operações,Analista,P031,Campinas,sim
+P053,Operações,Analista,P031,Campinas,sim
+P054,Operações,Analista,P031,Campinas,sim
+P055,Operações,Analista,P031,Campinas,sim
+P056,Operações,Analista,P031,Campinas,nao
+P057,Operações,Analista,P031,Campinas,sim
+P058,Operações,Analista,P031,Campinas,sim
+P059,Operações,Analista,P031,Campinas,sim
+P060,Operações,Analista,P031,Campinas,sim
+P061,Operações,Analista,P031,Campinas,sim
+P062,Operações,Analista,P031,Campinas,sim
+P063,Operações,Analista,P031,Campinas,sim
+P064,Operações,Analista,P031,Campinas,sim
+P065,Tecnologia,Gestor,,São Paulo,sim
+P066,Tecnologia,Especialista,P065,São Paulo,nao
+P067,Tecnologia,Especialista,P065,São Paulo,sim
+P068,Tecnologia,Especialista,P065,São Paulo,sim
+P069,Tecnologia,Analista,P065,São Paulo,sim
+P070,Tecnologia,Analista,P065,São Paulo,sim
+P071,Tecnologia,Analista,P065,São Paulo,sim
+P072,Tecnologia,Analista,P065,São Paulo,nao
+P073,Tecnologia,Analista,P065,São Paulo,sim
+P074,Tecnologia,Analista,P065,São Paulo,sim
+P075,Tecnologia,Analista,P065,São Paulo,sim
+P076,Tecnologia,Analista,P065,São Paulo,sim
+P077,Tecnologia,Analista,P065,São Paulo,sim
+P078,Tecnologia,Analista,P065,São Paulo,nao
+P079,Tecnologia,Analista,P065,São Paulo,sim
+P080,Tecnologia,Analista,P065,São Paulo,nao
+P081,Tecnologia,Analista,P065,São Paulo,sim
+P082,Tecnologia,Analista,P065,São Paulo,sim
+P083,Tecnologia,Analista,P065,São Paulo,sim
+P084,Tecnologia,Analista,P065,São Paulo,nao
+P085,Tecnologia,Analista,P065,São Paulo,sim
+P086,Tecnologia,Analista,P065,São Paulo,sim
+P087,Financeiro,Gestor,,São Paulo,sim
+P088,Financeiro,Especialista,P087,São Paulo,sim
+P089,Financeiro,Especialista,P087,São Paulo,nao
+P090,Financeiro,Especialista,P087,São Paulo,sim
+P091,Financeiro,Analista,P087,São Paulo,sim
+P092,Financeiro,Analista,P087,São Paulo,sim
+P093,Financeiro,Analista,P087,São Paulo,sim
+P094,Financeiro,Analista,P087,São Paulo,sim
+P095,Financeiro,Analista,P087,São Paulo,sim
+P096,Financeiro,Analista,P087,São Paulo,sim
+P097,Financeiro,Analista,P087,São Paulo,nao
+P098,Financeiro,Analista,P087,São Paulo,sim
+P099,Financeiro,Analista,P087,São Paulo,sim
+P100,Financeiro,Analista,P087,São Paulo,sim
+P101,Financeiro,Analista,P087,São Paulo,nao
+P102,Financeiro,Analista,P087,São Paulo,sim
+P103,Gente e Gestão,Gestor,,São Paulo,sim
+P104,Gente e Gestão,Especialista,P103,São Paulo,sim
+P105,Gente e Gestão,Especialista,P103,São Paulo,sim
+P106,Gente e Gestão,Especialista,P103,São Paulo,nao
+P107,Gente e Gestão,Analista,P103,São Paulo,sim
+P108,Gente e Gestão,Analista,P103,São Paulo,sim
+P109,Gente e Gestão,Analista,P103,São Paulo,sim
+P110,Gente e Gestão,Analista,P103,São Paulo,sim
+P111,Gente e Gestão,Analista,P103,São Paulo,nao
+P112,Gente e Gestão,Analista,P103,São Paulo,nao
+P113,Gente e Gestão,Analista,P103,São Paulo,sim
+P114,Gente e Gestão,Analista,P103,São Paulo,sim

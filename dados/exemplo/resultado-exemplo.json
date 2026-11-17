@@ -1,0 +1,286 @@
+{
+  "pessoas": 114,
+  "ligacoes": 752,
+  "tipo": "todos",
+  "taxa_resposta": 0.7982456140350878,
+  "densidade": 0.058376028566992706,
+  "reciprocidade": 0.14634146341463414,
+  "concentracao_top5pct": 0.11037234042553191,
+  "comunidades": 6,
+  "modularidade": 0.6078550928780884,
+  "isolados": [
+    {
+      "id": "P001",
+      "area": "Comercial",
+      "cargo": "Gestor",
+      "respondeu": true,
+      "citacoes_recebidas": 0,
+      "citacoes_feitas": 1,
+      "conexoes": 1,
+      "intermediacao": 0,
+      "comunidade": 0
+    },
+    {
+      "id": "P030",
+      "area": "Comercial",
+      "cargo": "Analista",
+      "respondeu": false,
+      "citacoes_recebidas": 0,
+      "citacoes_feitas": 0,
+      "conexoes": 0,
+      "intermediacao": 0,
+      "comunidade": 5
+    },
+    {
+      "id": "P064",
+      "area": "Operações",
+      "cargo": "Analista",
+      "respondeu": true,
+      "citacoes_recebidas": 0,
+      "citacoes_feitas": 1,
+      "conexoes": 1,
+      "intermediacao": 0,
+      "comunidade": 0
+    },
+    {
+      "id": "P086",
+      "area": "Tecnologia",
+      "cargo": "Analista",
+      "respondeu": true,
+      "citacoes_recebidas": 0,
+      "citacoes_feitas": 1,
+      "conexoes": 1,
+      "intermediacao": 0,
+      "comunidade": 2
+    }
+  ],
+  "quase_isolados": [
+    {
+      "id": "P106",
+      "area": "Gente e Gestão",
+      "cargo": "Especialista",
+      "respondeu": false,
+      "citacoes_recebidas": 2,
+      "citacoes_feitas": 0,
+      "conexoes": 2,
+      "intermediacao": 0,
+      "comunidade": 4
+    },
+    {
+      "id": "P112",
+      "area": "Gente e Gestão",
+      "cargo": "Analista",
+      "respondeu": false,
+      "citacoes_recebidas": 2,
+      "citacoes_feitas": 0,
+      "conexoes": 2,
+      "intermediacao": 0,
+      "comunidade": 4
+    }
+  ],
+  "pontes": [
+    {
+      "id": "P003",
+      "area": "Comercial",
+      "cargo": "Especialista",
+      "respondeu": true,
+      "citacoes_recebidas": 8,
+      "citacoes_feitas": 12,
+      "conexoes": 17,
+      "intermediacao": 0.19940619283222458,
+      "comunidade": 1
+    },
+    {
+      "id": "P087",
+      "area": "Financeiro",
+      "cargo": "Gestor",
+      "respondeu": true,
+      "citacoes_recebidas": 2,
+      "citacoes_feitas": 8,
+      "conexoes": 9,
+      "intermediacao": 0.18180046354825116,
+      "comunidade": 3
+    },
+    {
+      "id": "P069",
+      "area": "Tecnologia",
+      "cargo": "Analista",
+      "respondeu": true,
+      "citacoes_recebidas": 15,
+      "citacoes_feitas": 24,
+      "conexoes": 26,
+      "intermediacao": 0.15042808500414168,
+      "comunidade": 2
+    },
+    {
+      "id": "P036",
+      "area": "Operações",
+      "cargo": "Analista",
+      "respondeu": true,
+      "citacoes_recebidas": 20,
+      "citacoes_feitas": 27,
+      "conexoes": 34,
+      "intermediacao": 0.15032631939490254,
+      "comunidade": 0
+    },
+    {
+      "id": "P091",
+      "area": "Financeiro",
+      "cargo": "Analista",
+      "respondeu": true,
+      "citacoes_recebidas": 4,
+      "citacoes_feitas": 8,
+      "conexoes": 11,
+      "intermediacao": 0.08332854461173045,
+      "comunidade": 3
+    }
+  ],
+  "areas": [
+    {
+      "area": "Comercial",
+      "pessoas": 30,
+      "responderam": 21,
+      "interno": 170,
+      "externo": 37,
+      "comunidades": {
+        "0": 1,
+        "1": 28,
+        "5": 1
+      },
+      "ei": -0.642512077294686,
+      "oculta": false,
+      "coesao": 0.9333333333333333
+    },
+    {
+      "area": "Operações",
+      "pessoas": 34,
+      "responderam": 31,
+      "interno": 298,
+      "externo": 56,
+      "comunidades": {
+        "0": 34
+      },
+      "ei": -0.6836158192090396,
+      "oculta": false,
+      "coesao": 1
+    },
+    {
+      "area": "Tecnologia",
+      "pessoas": 22,
+      "responderam": 17,
+      "interno": 98,
+      "externo": 47,
+      "comunidades": {
+        "2": 22
+      },
+      "ei": -0.35172413793103446,
+      "oculta": false,
+      "coesao": 1
+    },
+    {
+      "area": "Financeiro",
+      "pessoas": 16,
+      "responderam": 13,
+      "interno": 70,
+      "externo": 2,
+      "comunidades": {
+        "3": 16
+      },
+      "ei": -0.9444444444444444,
+      "oculta": false,
+      "coesao": 1
+    },
+    {
+      "area": "Gente e Gestão",
+      "pessoas": 12,
+      "responderam": 9,
+      "interno": 33,
+      "externo": 24,
+      "comunidades": {
+        "4": 12
+      },
+      "ei": -0.15789473684210525,
+      "oculta": false,
+      "coesao": 1
+    }
+  ],
+  "gestores": [
+    {
+      "gestor": "P001",
+      "area": "Comercial",
+      "time": 29,
+      "ligados": 0,
+      "fracao": 0
+    },
+    {
+      "gestor": "P031",
+      "area": "Operações",
+      "time": 33,
+      "ligados": 18,
+      "fracao": 0.5454545454545454
+    },
+    {
+      "gestor": "P065",
+      "area": "Tecnologia",
+      "time": 21,
+      "ligados": 8,
+      "fracao": 0.38095238095238093
+    },
+    {
+      "gestor": "P087",
+      "area": "Financeiro",
+      "time": 15,
+      "ligados": 8,
+      "fracao": 0.5333333333333333
+    },
+    {
+      "gestor": "P103",
+      "area": "Gente e Gestão",
+      "time": 11,
+      "ligados": 4,
+      "fracao": 0.36363636363636365
+    }
+  ],
+  "insights": [
+    {
+      "nivel": "aviso",
+      "titulo": "Taxa de resposta de 80%",
+      "texto": "23 pessoas não responderam. Elas ainda aparecem quando são citadas, mas as ligações que fariam não existem na base, então podem parecer menos conectadas do que são. Leia isolados e pontes com isso em mente."
+    },
+    {
+      "nivel": "insight",
+      "titulo": "A rede depende de poucas pontes",
+      "texto": "As 3 pessoas com maior intermediação estão em Comercial, Financeiro, Tecnologia. São elas que ligam grupos que, sem elas, quase não conversam. Vale perguntar: se uma delas sair ou mudar de função, quem assume esse papel?"
+    },
+    {
+      "nivel": "insight",
+      "titulo": "Financeiro fala quase só para dentro",
+      "texto": "Índice E-I de -0,94 (vai de -1, só ligações internas, a +1, só externas). 2 de 72 ligações da área cruzam a fronteira. É o retrato de um silo: confira se isso é escolha (trabalho isolado de propósito) ou gargalo."
+    },
+    {
+      "nivel": "insight",
+      "titulo": "4 pessoas fora do fluxo",
+      "texto": "Ninguém as citou e elas citaram no máximo uma pessoa. Antes de qualquer conclusão, confira se são recém-chegadas, se estão afastadas ou se não responderam. Isolamento na rede é um sinal para conversar, não um diagnóstico."
+    },
+    {
+      "nivel": "insight",
+      "titulo": "Gestor de Comercial fora do fluxo do próprio time",
+      "texto": "Só 0 de 29 pessoas do time têm ligação direta com o gestor. A informação do time está passando por outro caminho; vale entender qual."
+    },
+    {
+      "nivel": "info",
+      "titulo": "6 grupos reais de conversa",
+      "texto": "O algoritmo de comunidades (Louvain) achou 6 grupos, com modularidade de 0,61 (acima de 0,3 indica grupos bem separados). Compare com o organograma: área que se divide em vários grupos ou grupos que juntam áreas diferentes dizem muito sobre como o trabalho acontece."
+    },
+    {
+      "nivel": "info",
+      "titulo": "Reciprocidade de 15%",
+      "texto": "De cada 100 pares ligados, 15 se citam nos dois sentidos. Reciprocidade baixa em pedidos de ajuda costuma indicar sobrecarga em quem é muito procurado."
+    },
+    {
+      "nivel": "info",
+      "titulo": "As 5% mais citadas recebem 11% das citações",
+      "texto": "Quanto maior esse número, mais a rede depende de poucas pessoas para funcionar."
+    }
+  ]
+}
