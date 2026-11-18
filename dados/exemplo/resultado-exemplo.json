@@ -1,25 +1,33 @@
 {
+  "versao": 2,
   "pessoas": 114,
-  "ligacoes": 752,
+  "ligacoes": 720,
+  "citacoes": 834,
   "tipo": "todos",
+  "rede": "simetrizada",
+  "semente": 20261116,
   "taxa_resposta": 0.7982456140350878,
-  "densidade": 0.058376028566992706,
-  "reciprocidade": 0.14634146341463414,
-  "concentracao_top5pct": 0.11037234042553191,
-  "comunidades": 6,
-  "modularidade": 0.6078550928780884,
+  "responderam": 91,
+  "densidade": 0.11178388448998602,
+  "reciprocidade": 0.20503597122302158,
+  "concentracao_top5pct": 0.12949640287769784,
+  "comunidades": 5,
+  "comunidades_total": 6,
+  "modularidade": 0.5401467659705976,
+  "estabilidade_comunidades": 0.91353117108636,
+  "execucoes_louvain": 20,
+  "modularidade_faixa": [
+    0.5342615319043555,
+    0.5401467659705976
+  ],
+  "pedacos_separados": 0,
+  "eficiencia": 0.45603684728041866,
+  "distancia_media": 2.558628318584071,
+  "maior_componente": 113,
+  "componentes": 1,
+  "nucleo_max": 12,
+  "nucleo_pessoas": 29,
   "isolados": [
-    {
-      "id": "P001",
-      "area": "Comercial",
-      "cargo": "Gestor",
-      "respondeu": true,
-      "citacoes_recebidas": 0,
-      "citacoes_feitas": 1,
-      "conexoes": 1,
-      "intermediacao": 0,
-      "comunidade": 0
-    },
     {
       "id": "P030",
       "area": "Comercial",
@@ -29,7 +37,18 @@
       "citacoes_feitas": 0,
       "conexoes": 0,
       "intermediacao": 0,
-      "comunidade": 5
+      "intermediacao_dirigida": 0,
+      "intermediacao_simetrizada": 0,
+      "restricao": null,
+      "tamanho_efetivo": 0,
+      "nucleo": 0,
+      "comunidade": 5,
+      "papel": null,
+      "coordenador": 0,
+      "consultor": 0,
+      "representante": 0,
+      "porteiro": 0,
+      "ligacao": 0
     },
     {
       "id": "P064",
@@ -40,7 +59,18 @@
       "citacoes_feitas": 1,
       "conexoes": 1,
       "intermediacao": 0,
-      "comunidade": 0
+      "intermediacao_dirigida": 0,
+      "intermediacao_simetrizada": 0,
+      "restricao": 1,
+      "tamanho_efetivo": 1,
+      "nucleo": 1,
+      "comunidade": 0,
+      "papel": null,
+      "coordenador": 0,
+      "consultor": 0,
+      "representante": 0,
+      "porteiro": 0,
+      "ligacao": 0
     },
     {
       "id": "P086",
@@ -51,66 +81,176 @@
       "citacoes_feitas": 1,
       "conexoes": 1,
       "intermediacao": 0,
-      "comunidade": 2
+      "intermediacao_dirigida": 0,
+      "intermediacao_simetrizada": 0,
+      "restricao": 1,
+      "tamanho_efetivo": 1,
+      "nucleo": 1,
+      "comunidade": 2,
+      "papel": null,
+      "coordenador": 0,
+      "consultor": 0,
+      "representante": 0,
+      "porteiro": 0,
+      "ligacao": 0
     }
   ],
   "quase_isolados": [
     {
-      "id": "P106",
-      "area": "Gente e Gestão",
-      "cargo": "Especialista",
-      "respondeu": false,
-      "citacoes_recebidas": 2,
-      "citacoes_feitas": 0,
-      "conexoes": 2,
-      "intermediacao": 0,
-      "comunidade": 4
-    },
-    {
-      "id": "P112",
-      "area": "Gente e Gestão",
+      "id": "P093",
+      "area": "Financeiro",
       "cargo": "Analista",
       "respondeu": false,
       "citacoes_recebidas": 2,
       "citacoes_feitas": 0,
       "conexoes": 2,
+      "intermediacao": 0.00002633796881584492,
+      "intermediacao_dirigida": 0,
+      "intermediacao_simetrizada": 0.00002633796881584492,
+      "restricao": 0.53125,
+      "tamanho_efetivo": 2,
+      "nucleo": 2,
+      "comunidade": 3,
+      "papel": null,
+      "coordenador": 0,
+      "consultor": 0,
+      "representante": 0,
+      "porteiro": 0,
+      "ligacao": 0
+    },
+    {
+      "id": "P097",
+      "area": "Financeiro",
+      "cargo": "Analista",
+      "respondeu": true,
+      "citacoes_recebidas": 0,
+      "citacoes_feitas": 2,
+      "conexoes": 2,
       "intermediacao": 0,
-      "comunidade": 4
+      "intermediacao_dirigida": 0,
+      "intermediacao_simetrizada": 0,
+      "restricao": 0.8325944188764702,
+      "tamanho_efetivo": 1.35,
+      "nucleo": 2,
+      "comunidade": 3,
+      "papel": null,
+      "coordenador": 0,
+      "consultor": 0,
+      "representante": 0,
+      "porteiro": 0,
+      "ligacao": 0
+    },
+    {
+      "id": "P100",
+      "area": "Financeiro",
+      "cargo": "Analista",
+      "respondeu": false,
+      "citacoes_recebidas": 2,
+      "citacoes_feitas": 0,
+      "conexoes": 2,
+      "intermediacao": 0.000022575401842152787,
+      "intermediacao_dirigida": 0,
+      "intermediacao_simetrizada": 0.000022575401842152787,
+      "restricao": 0.625,
+      "tamanho_efetivo": 2,
+      "nucleo": 2,
+      "comunidade": 3,
+      "papel": null,
+      "coordenador": 0,
+      "consultor": 0,
+      "representante": 0,
+      "porteiro": 0,
+      "ligacao": 0
     }
   ],
   "pontes": [
     {
-      "id": "P003",
-      "area": "Comercial",
+      "id": "P088",
+      "area": "Financeiro",
       "cargo": "Especialista",
       "respondeu": true,
-      "citacoes_recebidas": 8,
-      "citacoes_feitas": 12,
-      "conexoes": 17,
-      "intermediacao": 0.19940619283222458,
-      "comunidade": 1
+      "citacoes_recebidas": 9,
+      "citacoes_feitas": 7,
+      "conexoes": 13,
+      "intermediacao": 0.23331711062324526,
+      "intermediacao_dirigida": 0.08397071217867678,
+      "intermediacao_simetrizada": 0.23331711062324526,
+      "restricao": 0.18669791597595142,
+      "tamanho_efetivo": 11.57653846153846,
+      "nucleo": 5,
+      "comunidade": 3,
+      "papel": "porteiro",
+      "coordenador": 24,
+      "consultor": 0,
+      "representante": 0,
+      "porteiro": 27,
+      "ligacao": 0
     },
     {
-      "id": "P087",
-      "area": "Financeiro",
-      "cargo": "Gestor",
+      "id": "P034",
+      "area": "Operações",
+      "cargo": "Especialista",
       "respondeu": true,
-      "citacoes_recebidas": 2,
-      "citacoes_feitas": 8,
-      "conexoes": 9,
-      "intermediacao": 0.18180046354825116,
-      "comunidade": 3
+      "citacoes_recebidas": 15,
+      "citacoes_feitas": 9,
+      "conexoes": 22,
+      "intermediacao": 0.1148306906742326,
+      "intermediacao_dirigida": 0.0333091205338257,
+      "intermediacao_simetrizada": 0.1148306906742326,
+      "restricao": 0.09158817284983549,
+      "tamanho_efetivo": 19.076634248552054,
+      "nucleo": 12,
+      "comunidade": 0,
+      "papel": "representante",
+      "coordenador": 69,
+      "consultor": 0,
+      "representante": 32,
+      "porteiro": 11,
+      "ligacao": 4
     },
     {
       "id": "P069",
       "area": "Tecnologia",
       "cargo": "Analista",
       "respondeu": true,
-      "citacoes_recebidas": 15,
-      "citacoes_feitas": 24,
-      "conexoes": 26,
-      "intermediacao": 0.15042808500414168,
-      "comunidade": 2
+      "citacoes_recebidas": 22,
+      "citacoes_feitas": 29,
+      "conexoes": 32,
+      "intermediacao": 0.09349301875040149,
+      "intermediacao_dirigida": 0.14241495341439478,
+      "intermediacao_simetrizada": 0.09349301875040149,
+      "restricao": 0.06552893711495572,
+      "tamanho_efetivo": 29.412666290349218,
+      "nucleo": 9,
+      "comunidade": 2,
+      "papel": "representante",
+      "coordenador": 49,
+      "consultor": 51,
+      "representante": 160,
+      "porteiro": 119,
+      "ligacao": 173
+    },
+    {
+      "id": "P003",
+      "area": "Comercial",
+      "cargo": "Especialista",
+      "respondeu": true,
+      "citacoes_recebidas": 9,
+      "citacoes_feitas": 8,
+      "conexoes": 15,
+      "intermediacao": 0.0889193669872649,
+      "intermediacao_dirigida": 0.04933584161582379,
+      "intermediacao_simetrizada": 0.0889193669872649,
+      "restricao": 0.14424356994210633,
+      "tamanho_efetivo": 12.413520202020202,
+      "nucleo": 9,
+      "comunidade": 1,
+      "papel": "coordenador",
+      "coordenador": 36,
+      "consultor": 0,
+      "representante": 13,
+      "porteiro": 7,
+      "ligacao": 1
     },
     {
       "id": "P036",
@@ -118,90 +258,234 @@
       "cargo": "Analista",
       "respondeu": true,
       "citacoes_recebidas": 20,
-      "citacoes_feitas": 27,
-      "conexoes": 34,
-      "intermediacao": 0.15032631939490254,
-      "comunidade": 0
+      "citacoes_feitas": 29,
+      "conexoes": 32,
+      "intermediacao": 0.07403257839696924,
+      "intermediacao_dirigida": 0.10673853774335337,
+      "intermediacao_simetrizada": 0.07403257839696924,
+      "restricao": 0.06505830117215958,
+      "tamanho_efetivo": 29.724049742528006,
+      "nucleo": 12,
+      "comunidade": 2,
+      "papel": "porteiro",
+      "coordenador": 59,
+      "consultor": 40,
+      "representante": 131,
+      "porteiro": 140,
+      "ligacao": 137
+    }
+  ],
+  "riscos": [
+    {
+      "id": "P088",
+      "area": "Financeiro",
+      "intermediacao": 0.23331711062324526,
+      "perdem_caminho": 15,
+      "areas_afetadas": {
+        "Financeiro": 15
+      },
+      "componentes": 2,
+      "queda_eficiencia": 0.13770335500287886,
+      "distancia_media": 2.167191766435623
     },
     {
-      "id": "P091",
-      "area": "Financeiro",
-      "cargo": "Analista",
-      "respondeu": true,
-      "citacoes_recebidas": 4,
-      "citacoes_feitas": 8,
-      "conexoes": 11,
-      "intermediacao": 0.08332854461173045,
-      "comunidade": 3
+      "id": "P082",
+      "area": "Tecnologia",
+      "intermediacao": 0.03152112445955139,
+      "perdem_caminho": 1,
+      "areas_afetadas": {
+        "Tecnologia": 1
+      },
+      "componentes": 1,
+      "queda_eficiencia": 0.015409182283893218,
+      "distancia_media": 2.5521703521703523
+    },
+    {
+      "id": "P069",
+      "area": "Tecnologia",
+      "intermediacao": 0.09349301875040149,
+      "perdem_caminho": 0,
+      "areas_afetadas": {},
+      "componentes": 1,
+      "queda_eficiencia": 0.015264797192136236,
+      "distancia_media": 2.6005469755469757
+    },
+    {
+      "id": "P036",
+      "area": "Operações",
+      "intermediacao": 0.07403257839696924,
+      "perdem_caminho": 0,
+      "areas_afetadas": {},
+      "componentes": 1,
+      "queda_eficiencia": 0.015004904026974663,
+      "distancia_media": 2.5955598455598454
+    },
+    {
+      "id": "P034",
+      "area": "Operações",
+      "intermediacao": 0.1148306906742326,
+      "perdem_caminho": 0,
+      "areas_afetadas": {},
+      "componentes": 1,
+      "queda_eficiencia": 0.013243405907523247,
+      "distancia_media": 2.6216216216216215
+    },
+    {
+      "id": "P003",
+      "area": "Comercial",
+      "intermediacao": 0.0889193669872649,
+      "perdem_caminho": 0,
+      "areas_afetadas": {},
+      "componentes": 1,
+      "queda_eficiencia": 0.008449820861155819,
+      "distancia_media": 2.606338481338481
+    },
+    {
+      "id": "P041",
+      "area": "Operações",
+      "intermediacao": 0.033965184420314855,
+      "perdem_caminho": 0,
+      "areas_afetadas": {},
+      "componentes": 1,
+      "queda_eficiencia": 0.008103296640939497,
+      "distancia_media": 2.5793114543114544
+    },
+    {
+      "id": "P039",
+      "area": "Operações",
+      "intermediacao": 0.06248184103519167,
+      "perdem_caminho": 0,
+      "areas_afetadas": {},
+      "componentes": 1,
+      "queda_eficiencia": 0.007785649439072769,
+      "distancia_media": 2.597007722007722
+    },
+    {
+      "id": "P105",
+      "area": "Gente e Gestão",
+      "intermediacao": 0.03548896505255766,
+      "perdem_caminho": 0,
+      "areas_afetadas": {},
+      "componentes": 1,
+      "queda_eficiencia": 0.006977092925231518,
+      "distancia_media": 2.5754504504504503
+    },
+    {
+      "id": "P079",
+      "area": "Tecnologia",
+      "intermediacao": 0.03199350931193897,
+      "perdem_caminho": 0,
+      "areas_afetadas": {},
+      "componentes": 1,
+      "queda_eficiencia": 0.005128963750726082,
+      "distancia_media": 2.5725546975546973
     }
   ],
   "areas": [
     {
       "area": "Comercial",
       "pessoas": 30,
-      "responderam": 21,
-      "interno": 170,
-      "externo": 37,
-      "comunidades": {
-        "0": 1,
-        "1": 28,
-        "5": 1
-      },
-      "ei": -0.642512077294686,
+      "responderam": 22,
+      "taxa_resposta": 0.7333333333333333,
+      "interno": 153,
+      "externo": 61,
+      "ei": -0.42990654205607476,
+      "ei_esperado": 0.706575545616919,
+      "p_valor": 0.000999000999000999,
+      "externo_vs_acaso": 0.334056971229972,
+      "silo": false,
       "oculta": false,
-      "coesao": 0.9333333333333333
+      "coesao": 0.9333333333333333,
+      "entradas_de_fora": 176,
+      "saidas_para_fora": 213,
+      "porteiro_principal": "P025",
+      "porteiro_participacao": 0.14204545454545456,
+      "representante_principal": "P027",
+      "representante_participacao": 0.09389671361502347
     },
     {
       "area": "Operações",
       "pessoas": 34,
-      "responderam": 31,
-      "interno": 298,
-      "externo": 56,
-      "comunidades": {
-        "0": 34
-      },
-      "ei": -0.6836158192090396,
+      "responderam": 30,
+      "taxa_resposta": 0.8823529411764706,
+      "interno": 262,
+      "externo": 79,
+      "ei": -0.5366568914956011,
+      "ei_esperado": 0.6609763259793865,
+      "p_valor": 0.000999000999000999,
+      "externo_vs_acaso": 0.27895828571258535,
+      "silo": false,
       "oculta": false,
-      "coesao": 1
+      "coesao": 0.9705882352941176,
+      "entradas_de_fora": 438,
+      "saidas_para_fora": 407,
+      "porteiro_principal": "P036",
+      "porteiro_participacao": 0.319634703196347,
+      "representante_principal": "P036",
+      "representante_participacao": 0.32186732186732187
     },
     {
       "area": "Tecnologia",
       "pessoas": 22,
-      "responderam": 17,
-      "interno": 98,
-      "externo": 47,
-      "comunidades": {
-        "2": 22
-      },
-      "ei": -0.35172413793103446,
+      "responderam": 19,
+      "taxa_resposta": 0.8636363636363636,
+      "interno": 97,
+      "externo": 66,
+      "ei": -0.1901840490797546,
+      "ei_esperado": 0.7955379651195349,
+      "p_valor": 0.000999000999000999,
+      "externo_vs_acaso": 0.4510157772499859,
+      "silo": false,
       "oculta": false,
-      "coesao": 1
+      "coesao": 1,
+      "entradas_de_fora": 295,
+      "saidas_para_fora": 259,
+      "porteiro_principal": "P069",
+      "porteiro_participacao": 0.4033898305084746,
+      "representante_principal": "P069",
+      "representante_participacao": 0.6177606177606177
     },
     {
       "area": "Financeiro",
       "pessoas": 16,
-      "responderam": 13,
-      "interno": 70,
-      "externo": 2,
-      "comunidades": {
-        "3": 16
-      },
-      "ei": -0.9444444444444444,
+      "responderam": 12,
+      "taxa_resposta": 0.75,
+      "interno": 50,
+      "externo": 3,
+      "ei": -0.8867924528301887,
+      "ei_esperado": 0.8597490055764053,
+      "p_valor": 0.000999000999000999,
+      "externo_vs_acaso": 0.060872487002472754,
+      "silo": true,
       "oculta": false,
-      "coesao": 1
+      "coesao": 1,
+      "entradas_de_fora": 27,
+      "saidas_para_fora": 0,
+      "porteiro_principal": "P088",
+      "porteiro_participacao": 1,
+      "representante_principal": null,
+      "representante_participacao": 0
     },
     {
       "area": "Gente e Gestão",
       "pessoas": 12,
-      "responderam": 9,
-      "interno": 33,
-      "externo": 24,
-      "comunidades": {
-        "4": 12
-      },
-      "ei": -0.15789473684210525,
+      "responderam": 8,
+      "taxa_resposta": 0.6666666666666666,
+      "interno": 28,
+      "externo": 51,
+      "ei": 0.2911392405063291,
+      "ei_esperado": 0.8987538402740969,
+      "p_valor": 0.000999000999000999,
+      "externo_vs_acaso": 0.6799929580760964,
+      "silo": false,
       "oculta": false,
-      "coesao": 1
+      "coesao": 0.9166666666666666,
+      "entradas_de_fora": 33,
+      "saidas_para_fora": 32,
+      "porteiro_principal": "P103",
+      "porteiro_participacao": 0.45454545454545453,
+      "representante_principal": "P110",
+      "representante_participacao": 0.25
     }
   ],
   "gestores": [
@@ -216,70 +500,153 @@
       "gestor": "P031",
       "area": "Operações",
       "time": 33,
-      "ligados": 18,
-      "fracao": 0.5454545454545454
+      "ligados": 12,
+      "fracao": 0.36363636363636365
     },
     {
       "gestor": "P065",
       "area": "Tecnologia",
       "time": 21,
-      "ligados": 8,
-      "fracao": 0.38095238095238093
+      "ligados": 11,
+      "fracao": 0.5238095238095238
     },
     {
       "gestor": "P087",
       "area": "Financeiro",
       "time": 15,
-      "ligados": 8,
-      "fracao": 0.5333333333333333
+      "ligados": 3,
+      "fracao": 0.2
     },
     {
       "gestor": "P103",
       "area": "Gente e Gestão",
       "time": 11,
-      "ligados": 4,
-      "fracao": 0.36363636363636365
+      "ligados": 6,
+      "fracao": 0.5454545454545454
     }
   ],
+  "sensibilidade": {
+    "replicas": 20,
+    "pessoas_retiradas": 9,
+    "pontes_mantidas": 0.8700000000000001,
+    "pontes_mantidas_min": 0.4,
+    "isolados_min": 3,
+    "isolados_max": 4,
+    "ei_variacao_media": 0.053001869927044545,
+    "silo_estavel": 1,
+    "modularidade_min": 0.5217997272933038,
+    "modularidade_max": 0.5442356030485339,
+    "dirigida_vs_simetrizada": {
+      "top5_em_comum": 0.8,
+      "correlacao": 0.8414510475706237,
+      "nao_respondentes_top10_simetrizada": 1,
+      "nao_respondentes_top10_dirigida": 0
+    }
+  },
+  "confiabilidade": {
+    "nivel": "cautela",
+    "motivos": [
+      "a taxa de resposta está entre 70% e 85%"
+    ]
+  },
   "insights": [
     {
-      "nivel": "aviso",
-      "titulo": "Taxa de resposta de 80%",
-      "texto": "23 pessoas não responderam. Elas ainda aparecem quando são citadas, mas as ligações que fariam não existem na base, então podem parecer menos conectadas do que são. Leia isolados e pontes com isso em mente."
+      "prioridade": 2,
+      "nivel": "atencao",
+      "tema": "dados",
+      "titulo": "Taxa de resposta de 80%: leia com cautela",
+      "texto": "23 pessoas não responderam. Elas aparecem quando alguém as cita, e a página conta a ligação nos dois sentidos para não apagá-las. Simulando mais 10% de não resposta (20 sorteios), em média 87% das cinco maiores pontes continuam no topo e o diagnóstico de silo se repete em 100% dos sorteios. Ponto de atenção: a taxa de resposta está entre 70% e 85%."
     },
     {
-      "nivel": "insight",
-      "titulo": "A rede depende de poucas pontes",
-      "texto": "As 3 pessoas com maior intermediação estão em Comercial, Financeiro, Tecnologia. São elas que ligam grupos que, sem elas, quase não conversam. Vale perguntar: se uma delas sair ou mudar de função, quem assume esse papel?"
+      "prioridade": 2,
+      "nivel": "risco",
+      "tema": "dependencia",
+      "ids": [
+        "P088"
+      ],
+      "titulo": "Uma saída deixaria 15 pessoas sem caminho até o resto da rede",
+      "texto": "Sem P088 (Financeiro), 15 pessoas, quase todas de Financeiro, deixam de ter qualquer caminho de conversa com o restante da organização, e a eficiência da rede cai 14%. É um ponto único de falha: o problema é a rede depender de uma pessoa só. Vale criar um segundo canal (rituais entre áreas, par de backup) antes que ele faça falta."
     },
     {
-      "nivel": "insight",
+      "prioridade": 3,
+      "nivel": "risco",
+      "tema": "silo",
+      "area": "Financeiro",
       "titulo": "Financeiro fala quase só para dentro",
-      "texto": "Índice E-I de -0,94 (vai de -1, só ligações internas, a +1, só externas). 2 de 72 ligações da área cruzam a fronteira. É o retrato de um silo: confira se isso é escolha (trabalho isolado de propósito) ou gargalo."
+      "texto": "3 de 53 ligações da área cruzam a fronteira (E-I de -0,89). Se as conversas ignorassem a área, o esperado seria um E-I de 0,86: a área tem só 6% das ligações externas que teria ao acaso. Toda área conversa mais para dentro, e isso é normal; esta está muito abaixo das demais. Confira se é escolha (trabalho que precisa de isolamento) ou gargalo. E a informação de fora entra quase toda por uma pessoa: P088 responde por 100% das entradas."
     },
     {
-      "nivel": "insight",
-      "titulo": "4 pessoas fora do fluxo",
-      "texto": "Ninguém as citou e elas citaram no máximo uma pessoa. Antes de qualquer conclusão, confira se são recém-chegadas, se estão afastadas ou se não responderam. Isolamento na rede é um sinal para conversar, não um diagnóstico."
-    },
-    {
-      "nivel": "insight",
+      "prioridade": 4.5,
+      "nivel": "atencao",
+      "tema": "gestor",
+      "ids": [
+        "P001"
+      ],
       "titulo": "Gestor de Comercial fora do fluxo do próprio time",
-      "texto": "Só 0 de 29 pessoas do time têm ligação direta com o gestor. A informação do time está passando por outro caminho; vale entender qual."
+      "texto": "Só 0 de 29 pessoas do time têm ligação direta, em qualquer sentido, com o gestor (P001). A informação do time está passando por outro caminho; vale entender qual."
     },
     {
-      "nivel": "info",
-      "titulo": "6 grupos reais de conversa",
-      "texto": "O algoritmo de comunidades (Louvain) achou 6 grupos, com modularidade de 0,61 (acima de 0,3 indica grupos bem separados). Compare com o organograma: área que se divide em vários grupos ou grupos que juntam áreas diferentes dizem muito sobre como o trabalho acontece."
+      "prioridade": 5,
+      "nivel": "atencao",
+      "tema": "pontes",
+      "ids": [
+        "P088",
+        "P034",
+        "P069"
+      ],
+      "titulo": "As três maiores pontes da rede",
+      "texto": "P088 (Financeiro), P034 (Operações) e P069 (Tecnologia) têm as maiores intermediações: estão no caminho mais curto entre muitos pares de colegas. Pergunta para o gestor: se uma delas sair ou mudar de função, quem assume esse papel?"
     },
     {
-      "nivel": "info",
-      "titulo": "Reciprocidade de 15%",
-      "texto": "De cada 100 pares ligados, 15 se citam nos dois sentidos. Reciprocidade baixa em pedidos de ajuda costuma indicar sobrecarga em quem é muito procurado."
+      "prioridade": 6.5,
+      "nivel": "atencao",
+      "tema": "isolados",
+      "ids": [
+        "P030",
+        "P064",
+        "P086"
+      ],
+      "titulo": "3 pessoas fora do fluxo",
+      "texto": "Ninguém as citou e elas têm no máximo uma ligação. 1 delas não respondeu, então pode ser só falta de dado. Antes de qualquer conclusão, confira se são recém-chegadas, se estão afastadas ou se trabalham remoto. Isolamento na rede é sinal para conversar, não diagnóstico."
     },
     {
+      "prioridade": 7,
       "nivel": "info",
-      "titulo": "As 5% mais citadas recebem 11% das citações",
+      "tema": "burt",
+      "ids": [
+        "P036",
+        "P069",
+        "P034"
+      ],
+      "titulo": "Quem cobre buracos estruturais",
+      "texto": "P036, P069 e P034 têm a menor restrição de Burt (0,07, 0,07 e 0,09): falam com grupos que não se falam entre si. Na pesquisa de Burt (2004), redes assim estão ligadas a ideias mais bem avaliadas. É um retrato de posição na rede, não de desempenho."
+    },
+    {
+      "prioridade": 8,
+      "nivel": "info",
+      "tema": "silo",
+      "titulo": "As demais áreas conversam para dentro na medida do esperado",
+      "texto": "Comercial, Operações, Tecnologia e Gente e Gestão têm mais ligações internas do que o acaso daria, o que é normal em qualquer empresa (as pessoas trabalham com o próprio time). Elas mantêm entre 28% e 68% das ligações externas que teriam ao acaso. Só chamamos de silo a área abaixo de 25%."
+    },
+    {
+      "prioridade": 8.5,
+      "nivel": "info",
+      "tema": "comunidades",
+      "titulo": "5 grupos reais de conversa",
+      "texto": "O algoritmo de comunidades (Louvain, 20 execuções, fica a melhor) achou 5 grupos, com modularidade de 0,54 (acima de 0,3 indica grupos bem separados). A divisão é estável: concordância média de 0,91 entre as execuções (1 = idênticas). Compare com o organograma: área que se divide em vários grupos ou grupos que juntam áreas diferentes dizem como o trabalho acontece."
+    },
+    {
+      "prioridade": 9.5,
+      "nivel": "info",
+      "tema": "reciprocidade",
+      "titulo": "Reciprocidade de 21%",
+      "texto": "Entre pares em que as duas pessoas responderam, 21 em cada 100 se citam nos dois sentidos. Reciprocidade baixa em pedidos de ajuda costuma indicar sobrecarga em quem é muito procurado."
+    },
+    {
+      "prioridade": 9.6,
+      "nivel": "info",
+      "tema": "concentracao",
+      "titulo": "As 5% mais citadas recebem 13% das citações",
       "texto": "Quanto maior esse número, mais a rede depende de poucas pessoas para funcionar."
     }
   ]

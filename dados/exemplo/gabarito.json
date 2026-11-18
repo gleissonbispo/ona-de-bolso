@@ -1,17 +1,22 @@
 {
   "semente": 42,
   "pessoas": 114,
-  "ligacoes": 819,
-  "pares_ligados": 752,
-  "porteiros_do_silo": [
-    "P087",
-    "P003"
-  ],
+  "citacoes": 907,
+  "pares_citados": 834,
+  "pares_ligados": 720,
   "pontes": [
     "P036",
     "P069"
   ],
   "silo": "Financeiro",
+  "porteiro": "P088",
+  "ponto_de_corte": "P088",
+  "contatos_do_porteiro": [
+    "P003",
+    "P034",
+    "P039"
+  ],
+  "ponte_nao_respondente": "P105",
   "gestor_fora_do_fluxo": "P001",
   "isolados": [
     "P064",
