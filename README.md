@@ -123,7 +123,7 @@ docs/           documento do projeto e histórico
 - Questionário de nomeação mede a percepção de quem responde, num momento. Não é registro de interação.
 - Não resposta fura a rede justamente nas ligações que faltam. A rede simetrizada recupera parte (quem é citado aparece), mas ligações entre duas pessoas que não responderam não existem na base. Por isso a regra dos 70%.
 - Os papéis de corretagem dependem do sentido da citação e, portanto, de quem respondeu. Quem não respondeu não aparece como porteiro nem como representante.
-- O limiar de silo (25% das ligações externas esperadas) é uma escolha de leitura, documentada e fixa. Não é um valor universal.
+- O limiar de silo (25% das ligações externas esperadas) é uma escolha de leitura. Ele está fixo no código e documentado, mas não é um valor universal.
 - O refinamento de comunidades separa pedaços desconectados, mas não é o algoritmo Leiden completo.
 - O desenho da rede usa layout de força O(n²) e fica limitado a 500 pessoas. Acima disso, a página mostra só as métricas.
 - Pesos (frequência de 1 a 5) entram nas comunidades e na restrição de Burt. Intermediação e distâncias ignoram o peso.
@@ -144,7 +144,7 @@ docs/           documento do projeto e histórico
 - E-I sem linha de base chama tudo de silo. Na base de exemplo, as cinco áreas têm mais ligações internas do que o acaso daria. Comparar com o esperado mostrou que só uma está fora do padrão (6% das ligações externas esperadas, contra 28% a 68% das outras).
 - Louvain não dá sempre a mesma resposta. Com 20 sementes, a modularidade variou de 0,534 a 0,540 e a concordância média entre as divisões ficou em 0,91. Rodar várias vezes e mostrar a estabilidade é mais honesto do que apresentar uma divisão como se fosse a única.
 - O gerador pseudoaleatório da primeira versão estava errado sem dar erro: a conta passava do limite de precisão do JavaScript e a sequência divergia do esperado já no segundo número. Trocar por mulberry32 e testar contra a sequência de referência evitou surpresa.
-- O insight mais útil para gestor não é "quem é a ponte", e sim "o que acontece se ela sair". Medir a saída (15 pessoas sem caminho, eficiência 14% menor) transforma uma métrica abstrata em risco de dependência que dá para discutir numa reunião.
+- Para o gestor, a pergunta que pesa é "o que acontece se ela sair", mais do que "quem é a ponte". Medir a saída (15 pessoas sem caminho, eficiência 14% menor) transforma uma métrica abstrata em risco de dependência que dá para discutir numa reunião.
 - Planejar o gerador sintético junto com os testes obriga a dizer, antes de calcular, o que a ferramenta deveria encontrar.
 
 ## Referências
