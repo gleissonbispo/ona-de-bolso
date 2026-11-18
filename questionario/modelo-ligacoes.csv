@@ -1,0 +1,6 @@
+origem_id,destino_id,tipo,peso
+A002,A001,informacao,4
+A002,B002,informacao,2
+A002,B002,ajuda,3
+B002,B001,informacao,5
+A001,B001,informacao,3

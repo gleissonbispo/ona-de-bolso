@@ -1,0 +1,6 @@
+id,area,cargo,gestor_id,unidade,respondeu
+A001,Comercial,Gestor,,São Paulo,sim
+A002,Comercial,Analista,A001,São Paulo,sim
+A003,Comercial,Analista,A001,Campinas,nao
+B001,Operações,Gestor,,Campinas,sim
+B002,Operações,Especialista,B001,Campinas,sim

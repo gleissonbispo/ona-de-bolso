@@ -47,10 +47,19 @@ Inclua **todas** as pessoas convidadas, inclusive quem não respondeu.
 | `tipo` | `informacao`, `ajuda`, ... |
 | `peso` | frequência de 1 a 5 (opcional) |
 
-Separador vírgula ou ponto e vírgula, codificação UTF-8. Os arquivos de `dados/exemplo/` mostram o formato.
+Separador vírgula ou ponto e vírgula, codificação UTF-8. A página também aceita um `.xlsx` com as abas `pessoas` e `ligacoes`.
+
+Modelos prontos nesta pasta: `modelo-ona.xlsx`, `modelo-pessoas.csv` e `modelo-ligacoes.csv`. Os arquivos de `dados/exemplo/` mostram uma base completa.
+
+## Do formulário para as tabelas
+
+- Em cada opção das perguntas de nomeação, escreva o nome e o código entre parênteses: `Ana Souza (A002)`. Assim o conversor acha a pessoa sem depender da grafia do nome.
+- A primeira pergunta é "Seu código". Se a pesquisa for anônima, não há como montar a rede: ONA precisa saber quem citou quem. Por isso o cuidado com finalidade, acesso e pseudonimização é maior do que numa pesquisa de clima.
+- Exporte as respostas (Google Forms: CSV pelo Planilhas; Microsoft Forms: "Abrir no Excel") e rode `src/converter_forms.py`. O passo a passo está no README.
 
 ## Cuidados na leitura
 
 - A rede mostra como a informação circula, não quem trabalha melhor. Não use a tabela por pessoa para avaliar ou ranquear.
 - Áreas com menos de 5 pessoas ficam de fora dos resultados por área.
+- Abaixo de 70% de resposta, o relatório avisa que não dá para concluir sobre pontes e isolados.
 - "Isolado" é sinal para conversar (pessoa nova, afastada, remota, que não respondeu), não um diagnóstico.
