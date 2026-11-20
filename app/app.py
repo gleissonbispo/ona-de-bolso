@@ -26,7 +26,7 @@ from ona_de_bolso.insights import num, pct
 from ona_de_bolso.metricas import GRUPO_MINIMO, LIMITE_DESENHO, NOME_PAPEL
 from ona_de_bolso.relatorio import CORES, gerar_html
 
-st.set_page_config(page_title="ONA de bolso", page_icon=":material/hub:", layout="wide")
+st.set_page_config(page_title="ONA de bolso", page_icon=":material/hub:", layout="wide", initial_sidebar_state="collapsed")
 
 st.html("""<style>
 .block-container{padding-top:2.2rem;max-width:1180px}
