@@ -6,25 +6,33 @@ on:
   pull_request:
 
 jobs:
-  motor:
+  testes:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: astral-sh/setup-uv@v6
         with:
-          node-version: "20"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python }}
+      - name: Instalar
+        run: uv sync --locked
       - name: Base sintética é reprodutível
         run: |
-          python3 src/gerar_base.py
-          git diff --exit-code -- dados/exemplo/pessoas.csv dados/exemplo/ligacoes.csv dados/exemplo/gabarito.json
-      - name: Testes do motor
-        run: node testes/teste_motor.js
-      - name: Teste do conversor de Forms
-        run: python3 testes/teste_converter.py
-      - name: Página num arquivo só está atualizada
+          uv run python scripts/gerar_base.py
+          git diff --exit-code -- ona_de_bolso/exemplo/
+      - name: Lint (ruff)
+        run: uv run ruff check .
+      - name: Testes (pytest, inclui paridade com o motor JS e o app Streamlit)
+        run: uv run pytest -q
+      - name: O app importa sem erro
+        run: uv run python -c "import ast, pathlib; ast.parse(pathlib.Path('app/app.py').read_text()); import streamlit, altair, ona_de_bolso"
+      - name: Linha de comando na base de exemplo
         run: |
-          python3 src/montar_pagina.py
-          git diff --exit-code -- dist/ona-de-bolso.html web/exemplo.js
+          uv run ona-de-bolso exemplo /tmp/ex
+          uv run ona-de-bolso analisar /tmp/ex/pessoas.csv /tmp/ex/ligacoes.csv --saida /tmp/relatorio.html
+      - name: A demo do navegador está em dia com o código
+        run: |
+          uv run python scripts/montar_demo.py
+          git diff --exit-code demo/index.html

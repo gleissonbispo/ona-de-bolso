@@ -77,3 +77,13 @@ Coleta online do questionário (fica como planilha/Forms), dados de e-mail ou ca
 - Louvain em JavaScript puro: implementação própria precisa de teste; plano B é uma biblioteca pequena vendorizada (ex.: graphology), conferindo a licença.
 - Power BI (v2): visual customizado exige o toolkit `pbiviz` (Node); conferir se roda no Pi ou se o empacotamento fica para o PC dele.
 - Privacidade: mesmo processando só no navegador, o texto da página tem que deixar claro o cuidado com LGPD e com o uso do resultado (diagnóstico de rede, não avaliação de pessoa).
+
+---
+
+## v2 (18/11/2026): motor JavaScript revisado
+
+Rede simetrizada, E-I com linha de base, Louvain com 20 sementes, papéis de Gould e Fernandez, Burt, "e se sair" e sensibilidade à não resposta, tudo em JavaScript sem dependências (`web/ona-motor.js`, 43 testes em Node), com a página `web/ona.html` e o arquivo único `dist/ona-de-bolso.html`. Essa versão está preservada na tag `v1-javascript`.
+
+## v3 (20/11/2026): Python como núcleo
+
+O método foi reescrito em Python (`ona_de_bolso/`, com pandas e networkx), que é a stack do dia a dia do Gleisson. O comportamento foi mantido e conferido contra o motor JS na base de exemplo (`testes/test_paridade_js.py`): tudo que não depende do Louvain bate número a número, porque o Python usa o mesmo gerador mulberry32 e as mesmas regras. Entraram também a linha de comando, o relatório HTML, o notebook e o app Streamlit, que roda no navegador com stlite na demonstração do site.
