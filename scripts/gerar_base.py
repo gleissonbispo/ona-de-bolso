@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Gera uma organização fictícia para testar a ONA de bolso.
 
-Saída (em dados/exemplo/):
+Saída (em ona_de_bolso/exemplo/, a base que acompanha o pacote):
   pessoas.csv   id, area, cargo, gestor_id, unidade, respondeu
   ligacoes.csv  origem_id, destino_id, tipo, peso   (origem cita destino)
   gabarito.json o que foi plantado de propósito, para conferir se a ferramenta acha
@@ -41,12 +41,12 @@ P_FORA = {"informacao": 0.012, "ajuda": 0.004}    # chance de citar alguém de o
 def main():
     rnd = random.Random(SEMENTE)
     raiz = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    saida = os.path.join(raiz, "dados", "exemplo")
+    saida = os.path.join(raiz, "ona_de_bolso", "exemplo")
     os.makedirs(saida, exist_ok=True)
 
     pessoas, por_area, n = [], {}, 1
     for area, (tam, unidade) in AREAS.items():
-        ids = ["P%03d" % (n + i) for i in range(tam)]
+        ids = [f"P{n + i:03d}" for i in range(tam)]
         n += tam
         por_area[area] = ids
         gestor = ids[0]

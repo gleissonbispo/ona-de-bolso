@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ona-de-bolso"
+version = "3.0.0"
+description = "Análise de rede organizacional (ONA) a partir de um questionário e duas planilhas"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Gleisson Bispo" }]
+requires-python = ">=3.11"
+# Tudo isso existe no Pyodide 314 (stlite 1.12): networkx 3.6, pandas 3.0, numpy 2.4.
+dependencies = ["networkx>=3.3", "numpy>=1.26", "pandas>=2.2"]
+keywords = ["people analytics", "ona", "redes", "rh", "networkx"]
+
+[project.optional-dependencies]
+app = ["streamlit>=1.40", "altair>=5"]
+notebook = ["matplotlib>=3.8", "jupyter", "nbconvert"]
+
+[project.scripts]
+ona-de-bolso = "ona_de_bolso.cli:main"
+
+[project.urls]
+Repositorio = "https://github.com/gleissonbispo/ona-de-bolso"
+Site = "https://gleissonbispo.com.br"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6", "streamlit>=1.40", "altair>=5", "matplotlib>=3.8", "nbconvert", "ipykernel"]
+
+[tool.setuptools.packages.find]
+include = ["ona_de_bolso*"]
+
+[tool.setuptools.package-data]
+ona_de_bolso = ["exemplo/*.csv", "exemplo/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["testes"]
+
+[tool.ruff]
+line-length = 140
+target-version = "py311"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E741"]
+
+[tool.ruff.lint.per-file-ignores]
+# CSS e HTML em linha: quebrar as linhas só atrapalha a leitura
+"ona_de_bolso/relatorio.py" = ["E501"]
+"scripts/montar_demo.py" = ["E501"]
+"app/app.py" = ["E501"]
+"scripts/montar_notebook.py" = ["E501"]  # texto em markdown
