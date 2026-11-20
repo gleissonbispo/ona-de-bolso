@@ -1,0 +1,20 @@
+[theme]
+base = "light"
+primaryColor = "#8b5e3c"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#faf7f4"
+textColor = "#0a0a0a"
+borderColor = "#eaeaea"
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap, sans-serif"
+headingFontWeights = [500, 600, 600, 600, 600, 600]
+baseRadius = "0.6rem"
+chartCategoricalColors = ["#a65a2e", "#2f6db5", "#d9a31a", "#7b4fb0", "#2e9268", "#5f6b7a"]
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false
+
+[server]
+headless = true
