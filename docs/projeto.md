@@ -2,9 +2,9 @@
 
 Documento único do projeto: decisões, estado atual e próximos passos. O histórico está em [`historico.md`](historico.md).
 
-- Status: v3 (Python) pronta, em revisão do Gleisson (20/11/2026). Repositório privado.
+- Status: v3 (Python), publicada em 22/11/2026.
 - Repositório: github.com/gleissonbispo/ona-de-bolso. A versão JavaScript está na tag `v1-javascript`.
-- No site: fica como **projeto** (não no Laboratório). A demonstração interativa está no branch local `ona-demo` do `portfolio-gleisson`, em `/projetos/ona-de-bolso/demo`. O texto do projeto está em `~/hermes/site/projetos/ona-de-bolso.md` (`published: false`).
+- No site: página do projeto em [gleissonbispo.com.br/projetos/ona-de-bolso](https://gleissonbispo.com.br/projetos/ona-de-bolso), com a demonstração interativa em `/projetos/ona-de-bolso/demo`.
 
 ## Pergunta
 
@@ -50,7 +50,7 @@ questionário (Forms) -> ona-de-bolso converter-forms -> pessoas.csv + ligacoes.
 | mulberry32 com semente 20261116 | Resultado reprodutível e igual ao do motor JS (mesma sequência de sorteios); teste compara com a sequência de referência |
 | Grupo mínimo de 5 pessoas para resultado por área | Anonimato |
 | Desenho até 499 pessoas | O layout de força denso do networkx vai até 499; acima, ele exige scipy, que pesa 14 MB no navegador |
-| networkx onde ele resolve; Burt e eficiência reescritos | A restrição de Burt do networkx levava 10 s na base de exemplo. A fórmula é a mesma, conferida em teste |
+| networkx onde ele resolve; Burt e eficiência reescritos | A restrição de Burt do networkx levava 1,3 s na base de exemplo (e o tamanho efetivo, mais 1,3 s). A fórmula é a mesma, conferida em teste |
 | Rede desenhada com Altair | Já vem com o Streamlit, inclusive no stlite; plotly seriam mais 10 MB baixados na demo |
 | networkx na demo pelo arquivo do Pyodide | Pelo nome, o Pyodide traria o matplotlib junto (7 MB a mais) |
 
@@ -62,7 +62,7 @@ Prioridade dos insights: dados insuficientes (1), qualidade dos dados quando ped
 
 ## Testes (20/11/2026)
 
-68 testes no pytest, todos passando: algoritmos em redes conhecidas, base plantada, paridade com o motor JS, leitura de arquivos, CLI e o app (AppTest do Streamlit). A paridade com o JS é exata em tudo que não depende do Louvain; modularidade 0,5401 nas duas versões e estabilidade 0,90 (Python) contra 0,91 (JS).
+74 testes no pytest, todos passando: algoritmos em redes conhecidas, base plantada, paridade com o motor JS, leitura de arquivos, CLI e o app (AppTest do Streamlit). A paridade com o JS é exata em tudo que não depende do Louvain; modularidade 0,5401 nas duas versões e estabilidade 0,90 (Python) contra 0,91 (JS).
 
 Desempenho na base de exemplo: 1,6 s no Python do Raspberry Pi 5. Na demonstração no navegador (Chromium no Pi), o app abre em cerca de 25 s na primeira visita, baixando cerca de 30 MB, e a análise leva cerca de 9 s.
 
@@ -78,13 +78,11 @@ uv run python scripts/montar_demo.py         # regera demo/index.html (copiar pa
 python testes/gerar_referencia_js.py         # regera a referência do JS (precisa de node e da tag v1-javascript)
 ```
 
-## Decisões pendentes do Gleisson
+## Em aberto
 
-1. Revisar a seção "O que aprendi" do README (rascunho).
-2. Texto das perguntas do questionário (`questionario/questionario-ona.md`): conferir com o que já usou na prática.
-3. Tornar o repositório público (o README aponta para a demo do site, que só existe depois do merge do branch `ona-demo`).
-4. Publicar o projeto no site: merge do branch `ona-demo` e `publicar_projeto.py ~/hermes/site/projetos/ona-de-bolso.md`.
-5. Limiar de silo (25%) e de resposta (70%): manter ou ajustar.
+- Revisar a seção "O que aprendi" do README.
+- Texto das perguntas do questionário (`questionario/questionario-ona.md`): conferir com o uso real.
+- Limiar de silo (25%) e de resposta (70%): manter ou ajustar.
 
 ## Próximos passos
 

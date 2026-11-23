@@ -1,10 +1,10 @@
 # Histórico
 
-Registro de como o projeto começou. O estado atual está em [`projeto.md`](projeto.md) e no README.
+Minhas notas de como o projeto começou e mudou. O estado atual está em [`projeto.md`](projeto.md) e no README.
 
 ## v1 (16/11/2026)
 
-Projeto semanal P009, montado pelo Hermes (agente do Gleisson) a partir de uma ideia dele: juntar duas ideias do banco de projetos (ONA com métricas explicadas para RH e visual de Power BI).
+Começou como projeto de uma semana, juntando duas ideias que eu tinha anotado: ONA com as métricas explicadas para RH e um visual de Power BI.
 
 Resultado da v1 na base sintética de então (114 pessoas, semente 42): 9 de 9 testes passando, intermediação dirigida apontando as duas pontes e a dupla que ligava o Financeiro ao resto, Financeiro com E-I de -0,94, modularidade 0,61 com 6 comunidades (uma execução do Louvain), 23 ms de cálculo no Pi. A página ainda não tinha sido aberta num navegador.
 
@@ -16,13 +16,13 @@ Limites que a v2 corrigiu:
 - gerador pseudoaleatório linear congruente com perda de precisão (a multiplicação passava de 2^53);
 - sem papéis de corretagem, restrição de Burt, simulação de saída nem análise de sensibilidade à não resposta.
 
-O arquivo `projeto.md` da v1 era o modelo em branco do texto do site; o texto do site agora fica fora do repositório.
+O texto do projeto para o site fica fora do repositório.
 
 ---
 
 ## Plano original (PLANO.md da v1)
 
-Início: 16/11/2026 · Validar com o Gleisson até quinta, 19/11.
+Início: 16/11/2026. Meta: primeira versão de pé até 19/11.
 
 ### A pergunta
 
@@ -50,11 +50,11 @@ Como o RH, com um questionário simples e uma planilha, enxerga como a informaç
 | Concentração (% das ligações nas 5% mais citadas) | A rede depende de poucas pessoas? |
 | Gestor × time (distância do gestor ao próprio time) | O gestor está no fluxo do time? |
 
-Avisos que o relatório sempre mostra: taxa de resposta (rede furada em quem não respondeu), ranking individual escondido por padrão e grupo mínimo de 5 pessoas para mostrar resultado por área (regra do artigo de limite de anonimato).
+Avisos que o relatório sempre mostra: taxa de resposta (rede furada em quem não respondeu), ranking individual escondido por padrão e grupo mínimo de 5 pessoas para mostrar resultado por área (regra de limite de anonimato).
 
 ### Entregáveis
 
-**v1 (até quinta, para validar):**
+**v1 (até 19/11):**
 1. `questionario/` — template do questionário (texto das perguntas, instruções, layout das duas tabelas) e uma planilha-modelo.
 2. `src/gerar_base.py` — gerador da base sintética.
 3. `web/ona.html` — página única, sem servidor: o usuário solta os dois CSVs, a página calcula as métricas no navegador, desenha a rede (cor por área, tamanho por intermediação) e escreve o relatório de insights em português.
@@ -66,16 +66,15 @@ Avisos que o relatório sempre mostra: taxa de resposta (rede furada em quem nã
 
 Coleta online do questionário (fica como planilha/Forms), dados de e-mail ou calendário (ONA passiva), análise ao longo do tempo, ranking individual em destaque, publicação no site.
 
-### Divisão do trabalho
+### Decisões em aberto naquele momento
 
-- **Hermes:** template do questionário, gerador, motor de métricas em JavaScript, página, testes, README.
-- **Gleisson decide:** texto das perguntas (validar com o que já usou na prática), quais métricas ficam na tela inicial, nome do projeto e do repositório, e se a página vai para o site já na v1.
+- Texto das perguntas (conferir com o que já usei na prática), quais métricas ficam na tela inicial, nome do projeto e se a página vai para o site já na v1.
 
 ### Riscos
 
 - Desenho da rede pesado no navegador com muitas pessoas: limitar o desenho a ~500 nós e mostrar só métricas acima disso.
 - Louvain em JavaScript puro: implementação própria precisa de teste; plano B é uma biblioteca pequena vendorizada (ex.: graphology), conferindo a licença.
-- Power BI (v2): visual customizado exige o toolkit `pbiviz` (Node); conferir se roda no Pi ou se o empacotamento fica para o PC dele.
+- Power BI (v2): visual customizado exige o toolkit `pbiviz` (Node); conferir se roda no Raspberry Pi ou se o empacotamento fica para o PC.
 - Privacidade: mesmo processando só no navegador, o texto da página tem que deixar claro o cuidado com LGPD e com o uso do resultado (diagnóstico de rede, não avaliação de pessoa).
 
 ---
@@ -86,4 +85,8 @@ Rede simetrizada, E-I com linha de base, Louvain com 20 sementes, papéis de Gou
 
 ## v3 (20/11/2026): Python como núcleo
 
-O método foi reescrito em Python (`ona_de_bolso/`, com pandas e networkx), que é a stack do dia a dia do Gleisson. O comportamento foi mantido e conferido contra o motor JS na base de exemplo (`testes/test_paridade_js.py`): tudo que não depende do Louvain bate número a número, porque o Python usa o mesmo gerador mulberry32 e as mesmas regras. Entraram também a linha de comando, o relatório HTML, o notebook e o app Streamlit, que roda no navegador com stlite na demonstração do site.
+O método foi reescrito em Python (`ona_de_bolso/`, com pandas e networkx), que é a stack que uso no dia a dia. O comportamento foi mantido e conferido contra o motor JS na base de exemplo (`testes/test_paridade_js.py`): tudo que não depende do Louvain bate número a número, porque o Python usa o mesmo gerador mulberry32 e as mesmas regras. Entraram também a linha de comando, o relatório HTML, o notebook e o app Streamlit, que roda no navegador com stlite na demonstração do site.
+
+## v3.1 (22/11/2026): rede interativa e resumo para o gestor
+
+Rede do app com zoom, arrastar, destaque dos vizinhos e tooltip; o botão "Simular a saída" do painel da pessoa passou a funcionar (o multiselect da aba "E se sair" ignorava o valor novo). Resumo de uma página para o gestor (`--gestor` e botão no app). O conversor de Forms deixou de quebrar com linha sem id na tabela de pessoas e passou a juntar a mesma pergunta repetida em várias seções. O questionário ganhou as perguntas por extenso, como escrever, como aplicar e como ler o resultado.

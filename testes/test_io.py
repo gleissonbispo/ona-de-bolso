@@ -76,6 +76,15 @@ def test_conversor_ignora_linha_sem_id_na_tabela_de_pessoas(tmp_path):
     assert set(res.ligacoes["origem_id"]) == {"A002", "B002"}
 
 
+def test_conversor_junta_a_mesma_pergunta_repetida_em_secoes(tmp_path):
+    csv = ("Seu código,Com quem (Comercial),Com quem (Operações)\n"
+           "A002,Bruno Lima (A001),Carla Dias (B002)\n")
+    (tmp_path / "r.csv").write_text(csv, encoding="utf-8")
+    pessoas = next(iter(io.ler_tabelas(AQUI / "forms" / "pessoas.csv").values()))
+    res = io.converter_forms(tmp_path / "r.csv", pessoas, "Seu código", {"informacao": "Com quem"})
+    assert set(res.ligacoes["destino_id"]) == {"A001", "B002"}
+
+
 def test_csv_de_saida_abre_no_excel_com_acento():
     b = io.para_csv(pd.DataFrame({"area": ["Operações"]}))
     assert b.startswith("﻿".encode()) and "Operações".encode() in b

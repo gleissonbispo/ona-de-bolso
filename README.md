@@ -3,7 +3,9 @@
 Análise de rede organizacional (ONA) a partir de um questionário simples e duas planilhas.
 Mostra quem conecta as áreas, onde há silo de verdade e o que acontece com a rede se uma pessoa sair.
 
-É um pacote Python (pandas + networkx) com linha de comando, relatório HTML para o gestor, um notebook que conta a análise passo a passo e um app Streamlit. O mesmo app roda no navegador, sem servidor, na [demonstração do site](https://gleissonbispo.com.br/projetos/ona-de-bolso/demo).
+É um pacote Python (pandas + networkx) com linha de comando, relatório HTML completo e um resumo de uma página para o gestor, um notebook que conta a análise passo a passo e um app Streamlit. O mesmo app roda no navegador, sem servidor, na [demonstração do site](https://gleissonbispo.com.br/projetos/ona-de-bolso/demo).
+
+**Quer só o questionário?** As perguntas, como aplicar e os modelos de planilha estão em [`questionario/questionario-ona.md`](questionario/questionario-ona.md).
 
 ![A rede da base de exemplo com a simulação "e se sair" ativa: sem a pessoa P088, as 15 pessoas do Financeiro ficam sem caminho até o resto da organização](docs/img/app-e-se-sair.png)
 
@@ -47,10 +49,10 @@ O núcleo depende só de pandas, numpy e networkx. O app acrescenta Streamlit e 
 
 **As duas tabelas.** `pessoas.csv` (quem foi convidado: `id`, `area`, `cargo`, `gestor_id`, `unidade`, `respondeu`) e `ligacoes.csv` (quem citou quem: `origem_id`, `destino_id`, `tipo`, `peso`). Também vale um `.xlsx` com as duas abas. Modelos em `questionario/modelo-ona.xlsx`, `questionario/modelo-pessoas.csv` e `questionario/modelo-ligacoes.csv`.
 
-**Linha de comando.** Gera um relatório HTML num arquivo só, que abre sem internet e pode ir por e-mail ao gestor. A tabela por pessoa fica fora, a não ser que você peça.
+**Linha de comando.** Gera um relatório HTML num arquivo só, que abre sem internet e pode ir por e-mail. A tabela por pessoa fica fora, a não ser que você peça. Com `--gestor`, grava também o resumo de uma página: a resposta às três perguntas (área em silo, dependência de uma pessoa, gestor no fluxo do time), os achados principais, o que fazer e os limites.
 
 ```bash
-ona-de-bolso analisar pessoas.csv ligacoes.csv --saida relatorio.html --csv metricas.csv
+ona-de-bolso analisar pessoas.csv ligacoes.csv --saida relatorio.html --gestor resumo.html --csv metricas.csv
 ona-de-bolso analisar pesquisa.xlsx --saida relatorio.html      # Excel com as duas abas
 ona-de-bolso exemplo dados/                                     # copia a base de exemplo
 ```
@@ -75,7 +77,7 @@ ona.simular_saida(r, ["P088"])                 # e se essa pessoa sair?
 uv run streamlit run app/app.py
 ```
 
-Suba as duas planilhas (ou o Excel) ou use a base de exemplo. O app tem visão geral, insights, a rede interativa (filtro por área, cor por área, comunidade ou papel, clique numa pessoa para ver o detalhe), a simulação "e se sair", as áreas, a tabela por pessoa (escondida por padrão) e o download do relatório HTML e do CSV de métricas.
+Suba as duas planilhas (ou o Excel) ou use a base de exemplo. O app tem visão geral, insights, a rede interativa, a simulação "e se sair", as áreas, a tabela por pessoa (escondida por padrão) e o download do resumo para o gestor, do relatório completo e do CSV de métricas. Na rede, a roda do mouse aproxima, arrastar move e dois cliques voltam ao desenho inteiro; passar o mouse numa pessoa mostra área, cargo e papel e destaca quem está ligado a ela; o clique fixa o destaque e abre o painel da pessoa, com o botão "Simular a saída". Dá para filtrar as áreas e colorir por área, comunidade ou papel.
 
 <p>
 <img src="docs/img/app-visao-geral.png" alt="Visão geral do app: números da rede, cada um com explicação, e o aviso de leitura com cautela por causa da taxa de resposta de 80%" width="64%">
@@ -86,7 +88,7 @@ Suba as duas planilhas (ou o Excel) ou use a base de exemplo. O app tem visão g
 
 ## Do Google Forms ou Microsoft Forms às duas tabelas
 
-O questionário completo, com texto de convite e cuidados de LGPD, está em [`questionario/questionario-ona.md`](questionario/questionario-ona.md).
+O questionário completo (as perguntas por extenso, como escrever, quem convidar, taxa de resposta, texto de convite e cuidados de LGPD) está em [`questionario/questionario-ona.md`](questionario/questionario-ona.md).
 
 1. **Monte a tabela de pessoas antes do formulário.** Uma linha por pessoa convidada, com um código no lugar do nome (`A001`, `A002`...), a área, o gestor e a unidade. Ela vem do cadastro do RH, não do formulário.
 2. **Crie o formulário.** Primeira pergunta: "Seu código" (lista suspensa com os códigos ou nomes acompanhados do código). Depois, uma pergunta de caixas de seleção para cada tipo de ligação (`informacao`, `ajuda`...). Em cada opção, coloque o nome e o código entre parênteses: `Ana Souza (A002)`. Com muitas pessoas, divida as opções por área em seções.
@@ -110,7 +112,7 @@ Quem preferir pode montar `ligacoes.csv` à mão numa planilha: uma linha por no
 
 ## Métodos
 
-O pacote fica em `ona_de_bolso/`: `io` (leitura de CSV e XLSX, validação, conversor de Forms), `metricas` (o método), `insights` (regra de leitura e textos), `relatorio` (HTML) e `cli`. O networkx resolve intermediação, Louvain, modularidade, k-core e o layout do desenho. O resto foi escrito para o projeto e tem teste: E-I com linha de base, papéis de Gould e Fernandez, separação de comunidades desconectadas, Rand ajustado, "e se sair", sensibilidade e regra de leitura. Restrição de Burt e eficiência global seguem exatamente a fórmula do networkx (os testes comparam), reescritas porque a versão do networkx levava uns 10 s na base de exemplo.
+O pacote fica em `ona_de_bolso/`: `io` (leitura de CSV e XLSX, validação, conversor de Forms), `metricas` (o método), `insights` (regra de leitura e textos), `relatorio` (HTML) e `cli`. O networkx resolve intermediação, Louvain, modularidade, k-core e o layout do desenho. O resto foi escrito para o projeto e tem teste: E-I com linha de base, papéis de Gould e Fernandez, separação de comunidades desconectadas, Rand ajustado, "e se sair", sensibilidade e regra de leitura. Restrição de Burt e eficiência global seguem exatamente a fórmula do networkx (os testes comparam), reescritas porque a versão do networkx levava 2,6 s na base de exemplo (1,3 s cada), mais que a análise inteira de hoje.
 
 - **Duas redes.** Citações recebidas, reciprocidade e papéis de corretagem usam a rede dirigida (quem cita quem). Intermediação, comunidades, E-I, restrição de Burt e a simulação de saída usam a rede simetrizada: há ligação se um dos dois citou o outro. Informação corre nos dois sentidos, e quem não respondeu (que não cita ninguém) continua podendo aparecer como ponte. Na base de exemplo, a pessoa P105 não respondeu e é citada por quatro áreas: na rede dirigida a intermediação dela é zero; na simetrizada, ela é a 7ª maior.
 - **Intermediação:** algoritmo de Brandes (2001), normalizada de 0 a 1.
@@ -144,14 +146,14 @@ Comunidades: 5 grupos, modularidade 0,54, concordância de 0,90 entre as 20 exec
 ## Testes
 
 ```bash
-uv run pytest            # 68 testes
+uv run pytest            # 74 testes
 uv run ruff check .
 ```
 
 - `testes/test_algoritmos.py`: cada algoritmo numa rede pequena com resposta conhecida (caminho, estrela, duas panelinhas, grafo completo, os cinco papéis de Gould e Fernandez, Burt na estrela e no triângulo).
 - `testes/test_base_exemplo.py`: o que foi plantado na base sintética tem de aparecer, mais a regra de leitura (abaixo de 70% some o insight de pontes) e o anonimato (área com menos de 5 pessoas não aparece).
 - `testes/test_paridade_js.py`: compara com o motor JavaScript da versão anterior (tag `v1-javascript`), na base de exemplo. O Python usa o mesmo gerador e as mesmas regras, então intermediação, E-I, p-valores, papéis, Burt, "e se sair", sensibilidade e textos dos insights batem número a número. Só o Louvain do networkx é outro algoritmo: aí a comparação é da modularidade (0,5401 nas duas versões) com tolerância e da estabilidade (0,90 contra 0,91).
-- `testes/test_io.py`, `testes/test_cli.py` e `testes/test_app.py` (o app abre e roda a base de exemplo sem erro).
+- `testes/test_io.py`, `testes/test_cli.py` (inclui o resumo para o gestor) e `testes/test_app.py` (o app abre, roda a base de exemplo e o botão "Simular a saída" muda a simulação).
 
 Os testes e o lint rodam a cada push no GitHub Actions.
 
@@ -191,14 +193,12 @@ A versão anterior, com o motor em JavaScript e a página que abria com duplo cl
 
 ## O que aprendi
 
-> Rascunho para o Gleisson revisar e reescrever na voz dele.
-
-- Rede dirigida esconde exatamente quem não respondeu. Na primeira versão, a intermediação usava só o sentido citado, e uma pessoa citada por quatro áreas aparecia com intermediação zero porque não tinha preenchido o questionário. Simetrizar a rede para as medidas de fluxo resolveu, e virou teste.
-- E-I sem linha de base chama tudo de silo. Na base de exemplo, as cinco áreas têm mais ligações internas do que o acaso daria. Comparar com o esperado mostrou que só uma está fora do padrão (6% das ligações externas esperadas, contra 28% a 68% das outras).
-- Louvain não dá sempre a mesma resposta. Rodar 20 vezes e mostrar a concordância entre as execuções é mais honesto do que apresentar uma divisão como se fosse a única.
-- Reescrever de JavaScript para Python com um teste de paridade obrigou a separar o que é método do que é implementação. Usar o mesmo gerador pseudoaleatório nas duas versões fez as 1.000 permutações do E-I baterem até a última casa; o que sobrou de diferença é só o Louvain, e isso dá para explicar.
-- Biblioteca pronta nem sempre é a escolha certa. A restrição de Burt do networkx dava o mesmo número que a minha versão, mas levava 10 s na base de exemplo. Mantive a fórmula, reescrevi a conta e deixei o networkx como gabarito no teste.
-- Para o gestor, a pergunta que pesa é "o que acontece se ela sair", mais do que "quem é a ponte". Medir a saída (15 pessoas sem caminho, eficiência 14% menor) transforma uma métrica abstrata em risco de dependência que dá para discutir numa reunião.
+- **Quem não respondeu some da rede dirigida.** Na primeira versão, uma pessoa citada por quatro áreas aparecia com intermediação zero só porque não tinha preenchido o questionário. Passei a usar a rede simetrizada para as medidas de fluxo, e isso virou teste.
+- **Sem linha de base, toda área parece silo.** As cinco áreas da base de exemplo conversam mais para dentro do que o acaso daria. Comparando com o esperado, só uma fica fora do padrão: 6% das ligações externas esperadas, contra 28% a 68% das outras.
+- **Louvain não dá sempre a mesma resposta.** Rodo 20 vezes e mostro a concordância entre as execuções. É mais honesto do que apresentar uma divisão como se fosse a única.
+- **Teste de paridade separa método de implementação.** Ao trazer o motor de JavaScript para Python, usei o mesmo gerador pseudoaleatório nas duas versões, e as 1.000 permutações do E-I bateram até a última casa. A diferença que sobrou é só o Louvain, e ela tem explicação.
+- **Biblioteca pronta nem sempre é a melhor escolha.** A restrição de Burt do networkx dava o mesmo número que a minha conta, mas era mais lenta que a análise inteira. Mantive a fórmula, reescrevi a conta e deixei o networkx como gabarito no teste.
+- **Gestor pergunta "e se ela sair?", não "quem é a ponte?".** Medir a saída (15 pessoas sem caminho, eficiência 14% menor) transforma uma métrica abstrata num risco que dá para discutir em reunião. Foi daí que saiu o resumo de uma página.
 
 ## Referências
 

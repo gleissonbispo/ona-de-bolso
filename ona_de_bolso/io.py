@@ -313,7 +313,9 @@ def converter_forms(respostas: str | Path | bytes, pessoas: pd.DataFrame, quem: 
         raise ValueError("A tabela de pessoas não tem nenhum id preenchido.")
     padrao = re.compile(r"(?<![\w-])({})(?![\w-])".format("|".join(re.escape(i) for i in validos)))
     c_quem = _coluna(cab, quem)
-    cols = [(tipo, _coluna(cab, titulo)) for tipo, titulo in perguntas.items()]
+    # Uma pergunta pode estar repetida em várias seções do formulário (uma por área): junta todas as colunas.
+    cols = [(tipo, c) for tipo, titulo in perguntas.items()
+            for c in [i for i, x in enumerate(cab) if x.strip().lower().startswith(titulo.strip().lower())] or [_coluna(cab, titulo)]]
 
     ligacoes: set[tuple[str, str, str]] = set()
     responderam: set[str] = set()
