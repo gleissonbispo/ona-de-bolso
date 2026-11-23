@@ -307,7 +307,11 @@ def converter_forms(respostas: str | Path | bytes, pessoas: pd.DataFrame, quem: 
         matriz = ler_csv_texto(_texto(dados))
     cab, linhas = matriz[0], matriz[1:]
     ids = [str(i).strip() for i in pessoas["id"]]
-    padrao = re.compile(r"(?<![\w-])({})(?![\w-])".format("|".join(re.escape(i) for i in sorted(ids, key=len, reverse=True))))
+    # Linha em branco na tabela do RH daria uma alternativa vazia no padrão, que casa com qualquer texto.
+    validos = sorted({i for i in ids if i and i.lower() != "nan"}, key=len, reverse=True)
+    if not validos:
+        raise ValueError("A tabela de pessoas não tem nenhum id preenchido.")
+    padrao = re.compile(r"(?<![\w-])({})(?![\w-])".format("|".join(re.escape(i) for i in validos)))
     c_quem = _coluna(cab, quem)
     cols = [(tipo, _coluna(cab, titulo)) for tipo, titulo in perguntas.items()]
 

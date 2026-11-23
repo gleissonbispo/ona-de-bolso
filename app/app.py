@@ -8,6 +8,7 @@ servidor, as contas acontecem no computador de quem usa.
 
 from __future__ import annotations
 
+import hashlib
 import sys
 from pathlib import Path
 
@@ -24,7 +25,7 @@ import streamlit as st
 from ona_de_bolso import io as oio
 from ona_de_bolso.insights import num, pct
 from ona_de_bolso.metricas import GRUPO_MINIMO, LIMITE_DESENHO, NOME_PAPEL
-from ona_de_bolso.relatorio import CORES, gerar_html
+from ona_de_bolso.relatorio import CORES, gerar_html, gerar_html_gestor
 
 st.set_page_config(page_title="ONA de bolso", page_icon=":material/hub:", layout="wide", initial_sidebar_state="collapsed")
 
@@ -61,6 +62,11 @@ def relatorio_html(_r: ona.Resultado, chave: str, fonte: str) -> bytes:
     return gerar_html(_r, fonte=fonte).encode("utf-8")
 
 
+@st.cache_data(show_spinner=False)
+def resumo_gestor_html(_r: ona.Resultado, chave: str, fonte: str) -> bytes:
+    return gerar_html_gestor(_r, fonte=fonte).encode("utf-8")
+
+
 def cabecalho() -> None:
     st.html('<span class="ona-eyebrow">People Analytics · ONA</span>')
     st.title("ONA de bolso")
@@ -78,12 +84,14 @@ def entrada() -> None:
                 accept_multiple_files=True, help="pessoas: id, area, cargo, gestor_id, unidade, respondeu. "
                 "ligações: origem_id, destino_id, tipo, peso (quem respondeu cita quem).")
             if arquivos:
-                assinatura = tuple((f.name, f.size) for f in arquivos)
+                # assinatura pelo conteúdo: a planilha corrigida com o mesmo nome e tamanho também conta como nova
+                conteudo = [(f.name, f.getvalue()) for f in arquivos]
+                assinatura = hashlib.sha256(b"".join(n.encode() + b"\0" + d for n, d in conteudo)).hexdigest()[:16]
                 if st.session_state.get("assinatura") != assinatura:
-                    ent = oio.ler_entrada([(f.name, f.getvalue()) for f in arquivos])
+                    ent = oio.ler_entrada(conteudo)
                     st.session_state["assinatura"] = assinatura
                     if ent.completa:
-                        st.session_state["dados"] = (ent.pessoas, ent.ligacoes, " + ".join(ent.nomes.values()))
+                        st.session_state["dados"] = (ent.pessoas, ent.ligacoes, " + ".join(ent.nomes.values()), assinatura)
                         st.session_state.pop("pessoa_sel", None)
                         st.rerun()
                     else:
@@ -94,7 +102,7 @@ def entrada() -> None:
                      "ponto único de falha e 20% de não resposta plantados de propósito.")
             if st.button("Usar a base de exemplo", type="primary", icon=":material/play_arrow:"):
                 p, l = ona.exemplo()
-                st.session_state["dados"] = (p, l, "base de exemplo (sintética)")
+                st.session_state["dados"] = (p, l, "base de exemplo (sintética)", "exemplo")
                 st.session_state.pop("assinatura", None)
                 st.session_state.pop("pessoa_sel", None)
                 st.rerun()
@@ -127,18 +135,25 @@ def cores_por(r: ona.Resultado, modo: str) -> tuple[pd.Series, list[str], list[s
 def grafico_rede(r: ona.Resultado, pos: dict, modo: str, areas: list[str], foco: str | None = None,
                  removidos: list[str] | None = None, perdem: list[str] | None = None, selecionavel: bool = True,
                  altura: int = 560) -> alt.LayerChart:
+    """Desenho da rede em Altair, com zoom, arrastar, tooltip e destaque dos vizinhos.
+
+    O destaque ao passar o mouse e ao clicar acontece no navegador (expressões do Vega), sem rerun:
+    assim o zoom não se perde. ``foco`` (pessoa escolhida na lista) chega pronto do Python.
+    """
     df = r.pessoas_df()
     df["x"] = df["id"].map(lambda i: pos[i][0])
     df["y"] = df["id"].map(lambda i: pos[i][1])
     df["cor"], dom, rng = cores_por(r, modo)
     df["papel_txt"] = df["papel"].map(lambda p: NOME_PAPEL.get(p, "–") if p else "–")
+    df["cargo_txt"] = df["cargo"].fillna("").replace("", "–")
     df["intermed"] = df["intermediacao"].round(3)
-    df = df[df["area"].isin(areas)]
+    df = df[df["area"].isin(areas)].copy()
     visiveis = set(df["id"])
     g = r.rede
-    vizinhos = set()
-    if foco and foco in g.idx:
-        vizinhos = {g.nos[j]["id"] for j in g.adj_s[g.idx[foco]]} | {foco}
+    viz = {g.nos[i]["id"]: {g.nos[j]["id"] for j in g.adj_s[i]} for i in range(g.n)}
+    # "|id|vizinho|vizinho|": o Vega acha os vizinhos de quem está em foco com indexof, sem outra tabela
+    df["viz"] = ["|" + "|".join([i, *sorted(viz.get(i, ()) & visiveis)]) + "|" for i in df["id"]]
+    vizinhos = (viz.get(foco, set()) | {foco}) if foco else set()
     removidos, perdem = set(removidos or []), set(perdem or [])
     arestas = []
     for i in range(g.n):
@@ -148,32 +163,58 @@ def grafico_rede(r: ona.Resultado, pos: dict, modo: str, areas: list[str], foco:
             if j > i and a in visiveis and b in visiveis:
                 destaque = foco is not None and foco in (a, b)
                 some = a in removidos or b in removidos
-                arestas.append({"x": pos[a][0], "y": pos[a][1], "x2": pos[b][0], "y2": pos[b][1],
+                arestas.append({"a": a, "b": b, "x": pos[a][0], "y": pos[a][1], "x2": pos[b][0], "y2": pos[b][1],
                                 "op": 0.03 if some else (0.75 if destaque else (0.08 if foco else 0.22))})
-    ea = pd.DataFrame(arestas, columns=["x", "y", "x2", "y2", "op"])
+    ea = pd.DataFrame(arestas, columns=["a", "b", "x", "y", "x2", "y2", "op"])
     df["op"] = [0.15 if i in removidos else (1.0 if (not foco or i in vizinhos) else 0.18) for i in df["id"]]
     df["borda"] = ["#0a0a0a" if (i == foco or i in perdem) else "#ffffff" for i in df["id"]]
     df["larg"] = [2.2 if (i == foco or i in perdem) else 0.8 for i in df["id"]]
+
+    interativo = selecionavel and not removidos
+    # Quem manda no destaque: o mouse; senão, o clique (só quando a lista não escolheu outra pessoa).
+    ativos = ["hover"] + (["pessoa"] if interativo and not foco else [])
+    ha = " || ".join(f"isValid({s}.viz)" for s in ativos)
+
+    def em_foco(campo: str) -> str:
+        return "(" + " : ".join(f"isValid({s}.viz) ? indexof(''+{s}.viz, '|'+{campo}+'|') >= 0" for s in ativos) + " : false)"
+
+    def e_o_foco(campo: str) -> str:
+        return "(" + " : ".join(f"isValid({s}.id) ? {campo} == ''+{s}.id" for s in ativos) + " : false)"
+
     eixo = alt.Axis(title=None, labels=False, ticks=False, domain=False, grid=False)
     base_x = alt.X("x:Q", axis=eixo, scale=alt.Scale(zero=False, padding=12))
     base_y = alt.Y("y:Q", axis=eixo, scale=alt.Scale(zero=False, padding=12))
-    linhas = alt.Chart(ea).mark_rule(color="#9a9a9a", strokeWidth=0.8).encode(
-        x=base_x, y=base_y, x2="x2:Q", y2="y2:Q", opacity=alt.Opacity("op:Q", legend=None, scale=None))
-    pontos = alt.Chart(df).mark_circle(stroke="#ffffff").encode(
+    op_aresta = {"field": "op", "type": "quantitative", "scale": None, "legend": None}
+    op_ponto = dict(op_aresta)
+    borda = {"field": "borda", "type": "nominal", "scale": None}
+    larg = {"field": "larg", "type": "quantitative", "scale": None}
+    if interativo:
+        op_aresta["condition"] = [{"test": f"({ha}) && ({e_o_foco('datum.a')} || {e_o_foco('datum.b')})", "value": 0.8},
+                                  {"test": ha, "value": 0.04}]
+        op_ponto["condition"] = [{"test": f"({ha}) && ({em_foco('datum.id')})", "value": 1},
+                                 {"test": ha, "value": 0.12}]
+        borda["condition"] = {"test": e_o_foco("datum.id"), "value": "#0a0a0a"}
+        larg["condition"] = {"test": e_o_foco("datum.id"), "value": 2.4}
+    linhas = alt.Chart(ea).mark_rule(color="#9a9a9a", strokeWidth=0.8, clip=True).encode(
+        x=base_x, y=base_y, x2="x2:Q", y2="y2:Q", opacity=op_aresta)
+    pontos = alt.Chart(df).mark_circle(stroke="#ffffff", clip=True, cursor="pointer" if interativo else "default").encode(
         x=base_x, y=base_y,
-        color=alt.Color("cor:N", scale=alt.Scale(domain=dom, range=rng), legend=alt.Legend(title=None, orient="bottom", columns=6)),
+        color=alt.Color("cor:N", scale=alt.Scale(domain=dom, range=rng), legend=alt.Legend(title=None, orient="bottom", columns=6, symbolStrokeWidth=0)),
         size=alt.Size("intermediacao:Q", scale=alt.Scale(range=[30, 520]), legend=None),
-        opacity=alt.Opacity("op:Q", legend=None, scale=None),
-        stroke=alt.Stroke("borda:N", scale=None), strokeWidth=alt.StrokeWidth("larg:Q", scale=None),
+        opacity=op_ponto, stroke=borda, strokeWidth=larg,
         tooltip=[alt.Tooltip("id:N", title="Pessoa"), alt.Tooltip("area:N", title="Área"),
-                 alt.Tooltip("papel_txt:N", title="Papel"), alt.Tooltip("citacoes_recebidas:Q", title="Citações recebidas"),
-                 alt.Tooltip("intermed:Q", title="Intermediação")])
-    if selecionavel:
-        pontos = pontos.add_params(alt.selection_point(name="pessoa", fields=["id"], on="click", empty=False))
+                 alt.Tooltip("cargo_txt:N", title="Cargo"), alt.Tooltip("papel_txt:N", title="Papel"),
+                 alt.Tooltip("citacoes_recebidas:Q", title="Citações recebidas"),
+                 alt.Tooltip("conexoes:Q", title="Ligações"), alt.Tooltip("intermed:Q", title="Intermediação")])
+    if interativo:
+        pontos = pontos.add_params(
+            alt.selection_interval(name="zoom", bind="scales"),
+            alt.selection_point(name="hover", fields=["id", "viz"], on="mouseover", clear="mouseout", empty=False),
+            alt.selection_point(name="pessoa", fields=["id", "viz"], on="click", empty=False))
     marcas = [linhas, pontos]
     if removidos:
         fora = df[df["id"].isin(removidos)]
-        marcas.append(alt.Chart(fora).mark_point(shape="cross", size=260, color="#0a0a0a", strokeWidth=2.5).encode(x=base_x, y=base_y))
+        marcas.append(alt.Chart(fora).mark_point(shape="cross", size=260, color="#0a0a0a", strokeWidth=2.5, clip=True).encode(x=base_x, y=base_y))
     return alt.layer(*marcas).properties(height=altura).configure_view(strokeWidth=0)
 
 
@@ -244,18 +285,21 @@ def aba_rede(r: ona.Resultado, chave: str) -> None:
     with dir_:
         foco = st.selectbox("Pessoa", ids, index=None, placeholder="clique num ponto ou escolha", key="pessoa_sel")
         if foco:
-            detalhe_pessoa(r, foco)
+            detalhe_pessoa(r, foco, chave)
         else:
-            st.html('<p class="ona-nota">Passe o mouse para ver o detalhe. Clique num ponto para destacar a pessoa e '
-                    "quem está ligado a ela. Role para aproximar.</p>")
+            st.html('<p class="ona-nota">Passe o mouse sobre uma pessoa para ver a área, o papel e quem está ligado a '
+                    "ela. Clique para fixar e abrir o detalhe. Role para aproximar, arraste para mover e dê dois cliques "
+                    "para voltar ao desenho inteiro.</p>")
     with esq:
-        st.altair_chart(grafico_rede(r, pos, modo, areas, foco), width="stretch", on_select="rerun",
+        # Pessoa escolhida pelo clique já está destacada no navegador: o desenho não muda e o zoom fica.
+        foco_lista = foco if foco and foco != st.session_state.get("ultimo_clique") else None
+        st.altair_chart(grafico_rede(r, pos, modo, areas, foco_lista), width="stretch", on_select="rerun",
                         selection_mode="pessoa", key="grafico_rede")
         st.caption("Cada ponto é uma pessoa; cada linha, uma ligação citada em qualquer sentido. O tamanho cresce com a "
-                   "intermediação.")
+                   "intermediação. Para ver só algumas áreas, use o campo \"Áreas no desenho\".")
 
 
-def detalhe_pessoa(r: ona.Resultado, pid: str) -> None:
+def detalhe_pessoa(r: ona.Resultado, pid: str, chave: str) -> None:
     pp = {p["id"]: p for p in r["por_pessoa"]}
     p = pp[pid]
     ordem = sorted(r["por_pessoa"], key=lambda x: -x["intermediacao"])
@@ -268,9 +312,18 @@ def detalhe_pessoa(r: ona.Resultado, pid: str) -> None:
                  + (f"Restrição de Burt {num(p['restricao'], 2)}. " if p["restricao"] is not None else "")
                  + f"Papel: {NOME_PAPEL.get(p['papel'] or '', 'nenhum em destaque')}. Grupo {p['comunidade'] + 1}.")
         st.caption("Posição na rede, não desempenho.")
-        if st.button("Simular a saída", icon=":material/person_remove:", key="simular_desta"):
-            st.session_state["saem"] = [pid]
-            st.toast(f"Abra a aba \"E se sair\" para ver o efeito de tirar {pid}.")
+        # O callback grava na chave do multiselect da aba "E se sair" antes de ele ser criado no próximo run:
+        # gravar em outra chave não adianta, porque o widget guarda o próprio valor e ignora o default novo.
+        st.button("Simular a saída", icon=":material/person_remove:", key="simular_desta",
+                  on_click=lambda: st.session_state.update({f"saem_{chave}": [pid], "simulou": pid}))
+        if st.session_state.get("simulou") == pid and st.session_state.get(f"saem_{chave}") == [pid]:
+            s = ona.simular_saida(r, [pid])
+            if s["perdem_caminho"]:
+                st.markdown(f"Sem {pid}, **{len(s['perdem_caminho'])} pessoas ficam sem caminho** até o resto da rede e a "
+                            f"eficiência cai {pct(s['queda_eficiencia'])}.")
+            else:
+                st.markdown(f"Sem {pid}, ninguém perde o caminho; a eficiência cai {pct(s['queda_eficiencia'])}.")
+            st.caption("O desenho com a saída está na aba \"E se sair\".")
 
 
 def aba_saida(r: ona.Resultado, chave: str) -> None:
@@ -278,10 +331,11 @@ def aba_saida(r: ona.Resultado, chave: str) -> None:
     if not pode:
         st.warning("Com menos de 70% de resposta, a simulação aparece só para orientar a próxima rodada.")
     ids = [p["id"] for p in r["por_pessoa"]]
-    padrao = st.session_state.get("saem") or ([r["riscos"][0]["id"]] if r["riscos"] else [])
-    padrao = [i for i in padrao if i in ids]
-    saem = st.multiselect("Quem sai", ids, default=padrao, key=f"saem_{chave}",
-                          help="Escolha uma ou mais pessoas. A rede é recalculada sem elas.")
+    if f"saem_{chave}" not in st.session_state:
+        st.session_state[f"saem_{chave}"] = [r["riscos"][0]["id"]] if r["riscos"] else []
+    saem = st.multiselect("Quem sai", ids, key=f"saem_{chave}",
+                          help="Escolha uma ou mais pessoas. A rede é recalculada sem elas. No painel da pessoa, na aba "
+                               "Rede, o botão \"Simular a saída\" também preenche este campo.")
     if saem:
         s = ona.simular_saida(r, saem)
         c = st.columns(4)
@@ -377,13 +431,22 @@ def aba_pessoas(r: ona.Resultado) -> None:
 
 
 def aba_baixar(r: ona.Resultado, chave: str, fonte: str) -> None:
-    st.write("O relatório é um arquivo HTML único, que abre sem internet: dá para mandar ao gestor por e-mail. Ele não traz "
-             "a tabela por pessoa. O CSV tem as métricas por pessoa, para o Power BI ou o Excel.")
-    c1, c2 = st.columns(2)
-    c1.download_button("Relatório HTML", relatorio_html(r, chave, fonte), "relatorio-ona.html", "text/html", type="primary",
-                       icon=":material/description:", on_click="ignore", width="stretch")
-    c2.download_button("Métricas por pessoa (CSV)", oio.para_csv(r.pessoas_df()), "metricas-ona.csv", "text/csv",
-                       icon=":material/table:", on_click="ignore", width="stretch")
+    st.write("Os dois relatórios são arquivos HTML únicos, que abrem sem internet e podem ir por e-mail. Nenhum dos dois "
+             "traz a tabela por pessoa.")
+    c1, c2 = st.columns(2, gap="medium")
+    with c1, st.container(border=True):
+        st.markdown("**Resumo para o gestor**")
+        st.write("Uma página: as três perguntas (silo, dependência de uma pessoa, gestor no fluxo), os achados "
+                 "principais, o que fazer e os limites.")
+        st.download_button("Baixar o resumo", resumo_gestor_html(r, chave, fonte), "resumo-gestor-ona.html", "text/html",
+                           type="primary", icon=":material/summarize:", on_click="ignore", width="stretch")
+    with c2, st.container(border=True):
+        st.markdown("**Relatório completo**")
+        st.write("Todos os achados, o desenho da rede, as áreas, a simulação de saída e a sensibilidade à não resposta.")
+        st.download_button("Baixar o relatório", relatorio_html(r, chave, fonte), "relatorio-ona.html", "text/html",
+                           icon=":material/description:", on_click="ignore", width="stretch")
+    st.download_button("Métricas por pessoa (CSV, para Power BI ou Excel)", oio.para_csv(r.pessoas_df()), "metricas-ona.csv",
+                       "text/csv", icon=":material/table:", on_click="ignore")
 
 
 # ------------------------------------------------------------------ página
@@ -396,7 +459,7 @@ def main() -> None:
     if not dados:
         st.html('<p class="ona-nota">Nada sai do seu computador: as contas rodam aqui, e as planilhas não vão para servidor.</p>')
         return
-    pessoas, ligacoes, fonte = dados
+    pessoas, ligacoes, fonte, assinatura = dados
     erros, avisos = oio.validar(pessoas, ligacoes)
     if erros:
         for e in erros:
@@ -414,7 +477,7 @@ def main() -> None:
         st.caption(f"Fonte: {fonte}")
     with st.spinner("Calculando a rede, 1.000 permutações e 20 sorteios de não resposta..."):
         r = analisar(pessoas, ligacoes, tipo, rede)
-    chave = f"{fonte}|{tipo}|{rede}|{len(pessoas)}|{len(ligacoes)}"
+    chave = f"{assinatura}|{tipo}|{rede}"
     st.caption(f"{fonte} · {r['pessoas']} pessoas · {r['ligacoes']} pares ligados")
     abas = st.tabs(["Visão geral", "Insights", "Rede", "E se sair", "Áreas", "Pessoas", "Baixar"])
     with abas[0]:

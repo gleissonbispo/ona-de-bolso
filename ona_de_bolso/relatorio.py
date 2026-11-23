@@ -6,7 +6,7 @@ import datetime as _dt
 import html
 import math
 
-from .insights import num, pct
+from .insights import lista, num, pct
 from .metricas import GRUPO_MINIMO, LIMIAR_RESPOSTA, NOME_PAPEL, Resultado, posicoes
 
 # Paleta das áreas, com o terracota do site primeiro. As 5 primeiras passam no validador de daltonismo
@@ -186,3 +186,165 @@ def gerar_html(r: Resultado, titulo: str = "Rede de colaboração", fonte: str =
     return ('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{_e(titulo)} · ONA de bolso</title><style>{CSS}</style></head><body>{"".join(partes)}</body></html>')
+
+
+# ------------------------------------------------------------------ resumo para o gestor
+
+CSS_GESTOR = """
+:root{--fg:#0a0a0a;--sub:#525252;--muted:#6b6b6b;--line:#eaeaea;--surface:#fafafa;--accent:#8b5e3c;--accent-subtle:#faf3ee}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--fg);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:760px;margin:0 auto;padding:40px 16px 56px}
+h1{font-size:28px;font-weight:600;letter-spacing:-.02em;margin:0 0 6px;line-height:1.2}
+h2{font-size:17px;font-weight:600;margin:32px 0 10px;letter-spacing:-.01em}
+p.sub{color:var(--sub);margin:0 0 4px}
+.leitura{color:var(--sub);font-size:14px;margin:10px 0 0}
+.leitura b{color:var(--fg);font-weight:600}
+.perguntas{display:grid;gap:10px;margin:16px 0 0}
+.pergunta{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:7.5rem 1fr;gap:4px 16px;align-items:baseline}
+.pergunta .q{color:var(--sub);font-size:13.5px;grid-column:1/-1}
+.pergunta .r{font-weight:600;font-size:17px;letter-spacing:-.01em}
+.pergunta.sim .r{color:var(--accent)}
+.pergunta .d{color:var(--fg)}
+ol{padding-left:22px;margin:0}
+ol li{margin:8px 0;padding-left:4px}
+ol li b{font-weight:600}
+ul.acoes{list-style:none;padding:0;margin:0}
+ul.acoes li{border-left:3px solid var(--accent);background:var(--accent-subtle);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0}
+p.limites{color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:14px;margin-top:32px}
+@media (max-width:560px){.pergunta{grid-template-columns:1fr}}
+@media print{main{padding:0}body{font-size:13.5px}.pergunta,li{break-inside:avoid}}
+"""
+
+
+def _pergunta(q: str, resposta: str, detalhe: str, alerta: bool) -> str:
+    return (f'<div class="pergunta{" sim" if alerta else ""}"><span class="q">{_e(q)}</span>'
+            f'<span class="r">{_e(resposta)}</span><span class="d">{detalhe}</span></div>')
+
+
+def resumo_gestor(r: Resultado) -> dict:
+    """As três perguntas, os achados principais e o que fazer, em linguagem de gestor.
+
+    Usa só o que o relatório completo já mostra (mesmos critérios e mesmos números); muda a forma.
+    """
+    conf = r["confiabilidade"]
+    pode = conf["nivel"] != "insuficiente"
+    silos = [a for a in r["areas"] if a["silo"]]
+    corte = [x for x in r["riscos"] if x["perdem_caminho"] >= max(3, 0.03 * r["pessoas"])]
+    gestores_fora = [g for g in r["gestores"] if g["time"] >= GRUPO_MINIMO and g["fracao"] < 0.2]
+    gestores_ok = [g for g in r["gestores"] if g["time"] >= GRUPO_MINIMO]
+
+    perguntas = []
+    if silos:
+        a = silos[0]
+        det = (f'{_e(lista([s["area"] for s in silos]))}: {"a área tem" if len(silos) == 1 else "a primeira tem"} só '
+               f'{pct(a["externo_vs_acaso"])} das conversas com outras áreas que se esperaria pelo tamanho dela.')
+        if a["porteiro_principal"] and a["porteiro_participacao"] >= 0.5:
+            det += f' E o que chega de fora passa quase todo por uma pessoa ({_e(a["porteiro_principal"])}).'
+        if not pode:
+            det += " Com tão pouca resposta, confirme numa nova rodada antes de agir."
+        perguntas.append(("Alguma área virou silo?", "Sim", det, True))
+    else:
+        perguntas.append(("Alguma área virou silo?", "Não",
+                          "Toda área conversa mais com o próprio time, e isso é normal. Nenhuma está muito abaixo das outras.", False))
+    if not pode:
+        perguntas.append(("A rede depende de alguém? E se essa pessoa sair?", "Não dá para dizer",
+                          f'Só {pct(r["taxa_resposta"])} responderam. Abaixo de {pct(LIMIAR_RESPOSTA)}, a análise não conclui sobre pontes.', False))
+    elif corte:
+        x = corte[0]
+        det = (f'Sem {_e(x["id"])} ({_e(x["area"])}), {x["perdem_caminho"]} pessoas ficam sem nenhum caminho de conversa '
+               f'com o resto da empresa, e a rede fica {pct(x["queda_eficiencia"])} menos eficiente.')
+        if len(corte) > 1:
+            det += f' {_e(corte[1]["id"])} também é ponto único de falha ({corte[1]["perdem_caminho"]} pessoas).'
+        perguntas.append(("A rede depende de alguém? E se essa pessoa sair?", "Sim", det, True))
+    else:
+        top = max(r["riscos"], key=lambda x: x["queda_eficiencia"]) if r["riscos"] else None
+        det = "Nenhuma saída isolada deixa um grupo sem caminho até o resto."
+        if top:
+            det += f' A maior perda é de {pct(top["queda_eficiencia"])} na eficiência da rede.'
+        perguntas.append(("A rede depende de alguém? E se essa pessoa sair?", "Não", det, False))
+    if gestores_fora:
+        g = gestores_fora[0]
+        com = (f'não tem ligação direta com nenhuma das {g["time"]} pessoas' if g["ligados"] == 0
+               else f'tem ligação direta com só {g["ligados"]} de {g["time"]} pessoas')
+        det = (f'O gestor de {_e(g["area"])} ({_e(g["gestor"])}) {com} do time.'
+               + (f' Há mais {len(gestores_fora) - 1} na mesma situação.' if len(gestores_fora) > 1 else ""))
+        perguntas.append(("Os gestores estão no fluxo do time?", "Nem todos", det, True))
+    elif gestores_ok:
+        perguntas.append(("Os gestores estão no fluxo do time?", "Sim",
+                          f"Todos os gestores com time de {GRUPO_MINIMO} pessoas ou mais têm ligação direta com pelo menos 20% do time.", False))
+    else:
+        perguntas.append(("Os gestores estão no fluxo do time?", "Sem dado",
+                          f"A tabela de pessoas não tem gestor com time de {GRUPO_MINIMO} pessoas ou mais (coluna gestor_id).", False))
+
+    achados: list[str] = []
+    acoes: list[str] = []
+    if not pode:
+        achados.append(f'<b>A participação foi baixa.</b> {r["responderam"]} de {r["pessoas"]} pessoas responderam '
+                       f'({pct(r["taxa_resposta"])}). Com isso, quem parece ponte ou isolado pode ser só falta de dado.')
+        acoes.append(f'Rodar o questionário de novo, com prazo de uma a duas semanas e lembrete dos gestores, até passar de {pct(LIMIAR_RESPOSTA)}.')
+    for x in corte[:2] if pode else []:
+        achados.append(f'<b>Ponto único de falha em {_e(x["area"])}.</b> Sem {_e(x["id"])}, {x["perdem_caminho"]} pessoas perdem '
+                       "o único caminho até as outras áreas. O problema é a rede depender de uma pessoa, não a pessoa.")
+        acoes.append(f'Criar um segundo canal entre {_e(x["area"])} e as outras áreas: um par de backup para {_e(x["id"])} e um '
+                     "ritual fixo entre as áreas que mais dependem dessa ponte.")
+    for a in silos:
+        outras = [b["externo_vs_acaso"] for b in r["areas"] if not b["oculta"] and not b["silo"] and b["externo_vs_acaso"] is not None]
+        achados.append(f'<b>{_e(a["area"])} fala quase só para dentro.</b> A área tem {pct(a["externo_vs_acaso"])} das conversas '
+                       "com outras áreas que se esperaria pelo tamanho dela"
+                       + (f'; as demais ficam entre {pct(min(outras))} e {pct(max(outras))}.' if outras else "."))
+        acoes.append(f'Perguntar ao gestor de {_e(a["area"])} se o isolamento é escolha (trabalho que pede foco) ou gargalo. '
+                     "Se for gargalo, pôr mais gente do time em contato direto com as áreas parceiras.")
+    for g in gestores_fora:
+        quantos = (f'Nenhuma das {g["time"]} pessoas do time tem' if g["ligados"] == 0
+                   else f'Só {g["ligados"]} de {g["time"]} pessoas do time têm')
+        achados.append(f'<b>Gestor de {_e(g["area"])} fora do fluxo.</b> {quantos} ligação direta com o gestor. '
+                       "A informação do time está passando por outro caminho.")
+        acoes.append(f'Entender com o gestor de {_e(g["area"])} por onde a informação do time circula e rever os rituais '
+                     "(conversas individuais, reunião de time).")
+    for a in r["areas"]:
+        if (pode and not a["oculta"] and not a["silo"] and a["porteiro_principal"] and a["porteiro_participacao"] >= 0.5
+                and a["entradas_de_fora"] >= 10):
+            achados.append(f'<b>Em {_e(a["area"])}, a informação de fora entra por uma pessoa.</b> {_e(a["porteiro_principal"])} '
+                           f'aparece em {pct(a["porteiro_participacao"])} das entradas.')
+            acoes.append(f'Abrir contato direto entre mais gente de {_e(a["area"])} e as áreas parceiras.')
+    if pode and r["pontes"]:
+        p3 = [p["id"] for p in r["pontes"][:3]]
+        achados.append(f'<b>As maiores pontes entre áreas são {_e(lista(p3))}.</b> Estão no caminho mais curto entre muitos '
+                       "colegas. Isso é posição na rede, não desempenho.")
+        acoes.append(f"Saber o que passa por {_e(lista(p3))} e quem assumiria se uma delas sair ou mudar de função.")
+    if pode and r["isolados"]:
+        achados.append(f'<b>{len(r["isolados"])} pessoas fora do fluxo.</b> Ninguém as citou. Pode ser pessoa nova, afastada, '
+                       "remota ou que não respondeu.")
+        acoes.append("Antes de concluir qualquer coisa sobre quem está fora do fluxo, conversar com o gestor de cada uma.")
+
+    limites = (f'Base: {r["responderam"]} de {r["pessoas"]} pessoas responderam ({pct(r["taxa_resposta"])}), '
+               "num questionário de percepção feito num momento. Mostra como a informação circula, não o desempenho de "
+               "ninguém, e não deve entrar em avaliação, promoção ou desligamento.")
+    return {"perguntas": perguntas, "achados": achados[:5], "acoes": acoes[:4], "limites": limites,
+            "leitura": {"boa": "leitura estável", "cautela": "leia com cautela", "insuficiente": "dados insuficientes"}[conf["nivel"]],
+            "motivos": conf["motivos"]}
+
+
+def gerar_html_gestor(r: Resultado, titulo: str = "Rede de colaboração", fonte: str = "") -> str:
+    """Resumo de uma página para o gestor: as três perguntas, os achados, o que fazer e os limites.
+
+    Não traz desenho, tabela técnica nem números por pessoa além de quem é ponto de dependência.
+    """
+    s = resumo_gestor(r)
+    hoje = _dt.date.today().strftime("%d/%m/%Y")
+    partes = [f"<main><h1>{_e(titulo)}: resumo para o gestor</h1>",
+              f'<p class="sub">{r["pessoas"]} pessoas{" · " + _e(fonte) if fonte else ""} · {hoje}</p>',
+              f'<p class="leitura"><b>{pct(r["taxa_resposta"])} responderam: {_e(s["leitura"])}.</b>'
+              + (f' Motivo: {_e("; ".join(s["motivos"]))}.' if s["motivos"] and s["leitura"] != "leitura estável" else "") + "</p>",
+              '<h2>As três perguntas</h2><div class="perguntas">']
+    partes += [_pergunta(*p) for p in s["perguntas"]]
+    partes.append("</div>")
+    if s["achados"]:
+        partes.append("<h2>O que a rede mostra</h2><ol>" + "".join(f"<li>{a}</li>" for a in s["achados"]) + "</ol>")
+    if s["acoes"]:
+        partes.append('<h2>O que fazer</h2><ul class="acoes">' + "".join(f"<li>{a}</li>" for a in s["acoes"]) + "</ul>")
+    partes.append(f'<p class="limites">{_e(s["limites"])} Detalhes e método no relatório completo.</p></main>')
+    return ('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            f'<title>{_e(titulo)} · resumo para o gestor</title><style>{CSS_GESTOR}</style></head><body>{"".join(partes)}</body></html>')

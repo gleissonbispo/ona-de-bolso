@@ -63,6 +63,19 @@ def test_conversor_le_virgula_do_google_e_ponto_e_virgula_do_microsoft():
     assert respondeu == {"A001": "nao", "A002": "sim", "B001": "nao", "B002": "sim"}
 
 
+def test_conversor_ignora_linha_sem_id_na_tabela_de_pessoas(tmp_path):
+    # Linha em branco no meio da tabela do RH: antes, o padrão ganhava uma alternativa vazia e todas as
+    # ligações saíam com origem_id vazio.
+    csv = (AQUI / "forms" / "pessoas.csv").read_text(encoding="utf-8").replace("A002,Comercial\n", "A002,Comercial\n,Comercial\n")
+    (tmp_path / "pessoas.csv").write_text(csv, encoding="utf-8")
+    pessoas = next(iter(io.ler_tabelas(tmp_path / "pessoas.csv").values()))
+    assert "" in set(pessoas["id"].astype(str).str.strip()) or pessoas["id"].isna().any()
+    res = io.converter_forms(AQUI / "forms" / "respostas-google.csv", pessoas, "Seu código",
+                             {"informacao": "Com quem", "ajuda": "A quem"})
+    assert len(res.ligacoes) == 5
+    assert set(res.ligacoes["origem_id"]) == {"A002", "B002"}
+
+
 def test_csv_de_saida_abre_no_excel_com_acento():
     b = io.para_csv(pd.DataFrame({"area": ["Operações"]}))
     assert b.startswith("﻿".encode()) and "Operações".encode() in b

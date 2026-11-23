@@ -11,7 +11,7 @@ from . import __version__
 from .insights import pct
 from .io import converter_forms, ler_pessoas_ligacoes, ler_tabelas, para_csv, validar
 from .metricas import analisar
-from .relatorio import gerar_html
+from .relatorio import gerar_html, gerar_html_gestor
 
 
 def _analisar(a: argparse.Namespace) -> int:
@@ -32,12 +32,14 @@ def _analisar(a: argparse.Namespace) -> int:
     ms = (time.perf_counter() - t0) * 1000
     fonte = " + ".join(Path(x).name for x in [a.pessoas, a.ligacoes] if x)
     Path(a.saida).write_text(gerar_html(r, titulo=a.titulo, fonte=fonte, incluir_pessoas=a.incluir_pessoas), encoding="utf-8")
+    if a.gestor:
+        Path(a.gestor).write_text(gerar_html_gestor(r, titulo=a.titulo, fonte=fonte), encoding="utf-8")
     if a.csv:
         Path(a.csv).write_bytes(para_csv(r.pessoas_df()))
     if a.json:
         Path(a.json).write_text(r.json(indent=1), encoding="utf-8")
     print(f"ok: {r['pessoas']} pessoas, {pct(r['taxa_resposta'])} de resposta, leitura {r['confiabilidade']['nivel']}, "
-          f"{len(r['insights'])} insights em {ms:.0f} ms -> {a.saida}")
+          f"{len(r['insights'])} insights em {ms:.0f} ms -> {a.saida}" + (f" e {a.gestor}" if a.gestor else ""))
     for i in r["insights"][:3]:
         print(f"  - {i['titulo']}")
     return 0
@@ -80,6 +82,7 @@ def montar_parser() -> argparse.ArgumentParser:
     a.add_argument("pessoas", help="pessoas.csv, ou um .xlsx com as abas pessoas e ligacoes")
     a.add_argument("ligacoes", nargs="?", help="ligacoes.csv (dispensável se o .xlsx tiver as duas abas)")
     a.add_argument("--saida", default="relatorio.html")
+    a.add_argument("--gestor", help="grava também o resumo de uma página para o gestor neste HTML")
     a.add_argument("--csv", help="grava as métricas por pessoa neste CSV")
     a.add_argument("--json", help="grava o resultado completo neste JSON")
     a.add_argument("--tipo", default="todos", help="só uma pergunta (ex.: informacao); padrão: todas")
